@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author Admin
  */
-@WebServlet(name="LoginControl", urlPatterns={"/LoginControl"})
+@WebServlet(name="login", urlPatterns={"/login"})
 public class LoginControl extends HttpServlet {
    
     /** 
@@ -66,7 +66,7 @@ public class LoginControl extends HttpServlet {
                     request.setAttribute("username", cookie.getValue());
                 }
                 if (cookie.getName().equals("passC")) {
-                    request.setAttribute("passsword", cookie.getValue());
+                    request.setAttribute("password", cookie.getValue());
                 }
             }
         }
@@ -85,12 +85,45 @@ public class LoginControl extends HttpServlet {
     throws ServletException, IOException {
         String username = request.getParameter("email");
         String password = request.getParameter("password");
+        int failedAttempt = 0;
+        long lockTime = 0;
+        Cookie [] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("failedAttempt_"+username)) {
+                failedAttempt = Integer.parseInt(cookie.getValue());
+            }
+            if (cookie.getName().equals("lockTime_"+username)) {
+                lockTime = Long.parseLong(cookie.getValue());
+            }
+        }
+        long currentTime = System.currentTimeMillis();
+        if (lockTime > currentTime) {
+            request.setAttribute("loginFailed", "this account is locked. Try again later");
+            request.getRequestDispatcher("login").forward(request, response);
+        }
         dao dao = new dao();
         Users a = dao.login(username, password);
         if (a == null) {
-            request.setAttribute("loginFailed", true);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            failedAttempt++;
+            if (failedAttempt >=3) {
+                lockTime = currentTime + (24 * 60 * 60 * 1000); // Khóa trong 1 ngày
+                failedAttempt = 0; // Đặt lại số lần thất bại sau khi khóa
+            }
+            Cookie failedAttemptCookie = new Cookie ("failedAttempt_"+username, String.valueOf(failedAttempt));
+            Cookie lockTimeCookie = new Cookie("lockTime_"+username, String.valueOf(lockTime));
+            failedAttemptCookie.setMaxAge(24*60*60);
+            lockTimeCookie.setMaxAge(24*60*60);
+            response.addCookie(lockTimeCookie);
+            response.addCookie(failedAttemptCookie);
+            
+            
         } else {
+            Cookie failedAttemptCookie = new Cookie ("failedAttempt_"+ username, "0");
+             Cookie lockTimeCookie = new Cookie("lockTime_"+username, "0");
+             failedAttemptCookie.setMaxAge(0);
+             lockTimeCookie.setMaxAge(0);
+              response.addCookie(lockTimeCookie);
+            response.addCookie(failedAttemptCookie);
             HttpSession session = request.getSession();
             session.setAttribute("acc", a);
             session.setMaxInactiveInterval(60 * 60 * 24);
