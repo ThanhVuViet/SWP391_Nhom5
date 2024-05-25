@@ -119,11 +119,11 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
                 </form>
-                <div class="text-center mb-3">
+               <div class="text-center mb-3">
                     <p>Or login with</p>
-                    <a href="#" class="btn btn-danger w-100 mb-2">Login with Google</a>
+                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/SWP391_Group5/LoginGoogle&response_type=code&client_id=826239897772-hjalfh6l6mrrl73029j0fqs9lis7ffjo.apps.googleusercontent.com&access_type=online&prompt=consent" class="btn btn-danger w-100 mb-2">Login with Google</a>
                     <a href="#" class="btn btn-primary w-100">Login with Facebook</a>
-                </div>
+</div>
                 <div class="mt-3 text-center">
                     <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
                 </div>
