@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package control;
 
 import DAO.dao;
@@ -87,48 +82,58 @@ public class LoginControl extends HttpServlet {
         String password = request.getParameter("password");
         int failedAttempt = 0;
         long lockTime = 0;
-        Cookie [] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("failedAttempt_"+username)) {
-                failedAttempt = Integer.parseInt(cookie.getValue());
-            }
-            if (cookie.getName().equals("lockTime_"+username)) {
-                lockTime = Long.parseLong(cookie.getValue());
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("failedAttempt_" + username)) {
+                    failedAttempt = Integer.parseInt(cookie.getValue());
+                }
+                if (cookie.getName().equals("lockTime_" + username)) {
+                    lockTime = Long.parseLong(cookie.getValue());
+                }
             }
         }
+
         long currentTime = System.currentTimeMillis();
         if (lockTime > currentTime) {
-            request.setAttribute("loginFailed", "this account is locked. Try again later");
-            request.getRequestDispatcher("login").forward(request, response);
+            request.setAttribute("loginFailed", "This account is locked. Try again later.");
+            request.setAttribute("username", username);
+            request.setAttribute("password", password);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
         }
+
         dao dao = new dao();
         Users a = dao.login(username, password);
         if (a == null) {
             failedAttempt++;
-            if (failedAttempt >=3) {
+            if (failedAttempt >= 3) {
                 lockTime = currentTime + (24 * 60 * 60 * 1000); // Khóa trong 1 ngày
                 failedAttempt = 0; // Đặt lại số lần thất bại sau khi khóa
             }
-            Cookie failedAttemptCookie = new Cookie ("failedAttempt_"+username, String.valueOf(failedAttempt));
-            Cookie lockTimeCookie = new Cookie("lockTime_"+username, String.valueOf(lockTime));
-            failedAttemptCookie.setMaxAge(24*60*60);
-            lockTimeCookie.setMaxAge(24*60*60);
+            Cookie failedAttemptCookie = new Cookie("failedAttempt_" + username, String.valueOf(failedAttempt));
+            Cookie lockTimeCookie = new Cookie("lockTime_" + username, String.valueOf(lockTime));
+            failedAttemptCookie.setMaxAge(24 * 60 * 60);
+            lockTimeCookie.setMaxAge(24 * 60 * 60);
+            response.addCookie(failedAttemptCookie);
             response.addCookie(lockTimeCookie);
-            response.addCookie(failedAttemptCookie);
-            
-            
+
+            request.setAttribute("loginFailed", "Invalid username or password.");
+            request.setAttribute("username", username);
+            request.setAttribute("password", password);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
-            Cookie failedAttemptCookie = new Cookie ("failedAttempt_"+ username, "0");
-             Cookie lockTimeCookie = new Cookie("lockTime_"+username, "0");
-             failedAttemptCookie.setMaxAge(0);
-             lockTimeCookie.setMaxAge(0);
-              response.addCookie(lockTimeCookie);
+            // Đặt lại cookie khi đăng nhập thành công
+            Cookie failedAttemptCookie = new Cookie("failedAttempt_" + username, "0");
+            Cookie lockTimeCookie = new Cookie("lockTime_" + username, "0");
+            failedAttemptCookie.setMaxAge(0); // Xóa cookie
+            lockTimeCookie.setMaxAge(0); // Xóa cookie
             response.addCookie(failedAttemptCookie);
+            response.addCookie(lockTimeCookie);
+
             HttpSession session = request.getSession();
             session.setAttribute("acc", a);
             session.setMaxInactiveInterval(60 * 60 * 24);
-            // luu bien tren sesion
-            //luu bien tren cookie
 
             Cookie u = new Cookie("userC", username);
             Cookie p = new Cookie("passC", password);
@@ -136,13 +141,12 @@ public class LoginControl extends HttpServlet {
             p.setMaxAge(60 * 60 * 24);
             response.addCookie(p);
             response.addCookie(u);
+
             if (a.getRoleId() == 1) {
                 response.sendRedirect("admin");
-            }
-            else if (a.getRoleId() == 2) {
+            } else if (a.getRoleId() == 2) {
                 response.sendRedirect("home.jsp");
-            }
-            else if (a.getRoleId()==3) {
+            } else if (a.getRoleId() == 3) {
                 response.sendRedirect("expert");
             }
         }
