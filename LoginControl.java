@@ -96,7 +96,7 @@ public class LoginControl extends HttpServlet {
 
         long currentTime = System.currentTimeMillis();
         if (lockTime > currentTime) {
-            request.setAttribute("loginFailed", "This account is locked. Try again later.");
+            request.setAttribute("AccountLocked", "This account is locked. Try again later.");
             request.setAttribute("username", username);
             request.setAttribute("password", password);
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -107,9 +107,15 @@ public class LoginControl extends HttpServlet {
         Users a = dao.login(username, password);
         if (a == null) {
             failedAttempt++;
-            if (failedAttempt >= 3) {
-                lockTime = currentTime + (24 * 60 * 60 * 1000); // Khóa trong 1 ngày
-                failedAttempt = 0; // Đặt lại số lần thất bại sau khi khóa
+            if (failedAttempt >= 3 ) {
+                request.setAttribute("loginFailedThreeTime", "You forgot the password?");
+                request.setAttribute("username", username);
+                request.setAttribute("password", password);
+               
+            }
+            if (failedAttempt == 5) {
+                lockTime = currentTime + (24 * 60 * 60 * 1000); 
+                
             }
             Cookie failedAttemptCookie = new Cookie("failedAttempt_" + username, String.valueOf(failedAttempt));
             Cookie lockTimeCookie = new Cookie("lockTime_" + username, String.valueOf(lockTime));
@@ -117,13 +123,13 @@ public class LoginControl extends HttpServlet {
             lockTimeCookie.setMaxAge(24 * 60 * 60);
             response.addCookie(failedAttemptCookie);
             response.addCookie(lockTimeCookie);
-
+            request.setAttribute("failedAttempt", failedAttempt);
             request.setAttribute("loginFailed", "Invalid username or password.");
             request.setAttribute("username", username);
             request.setAttribute("password", password);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
-            // Đặt lại cookie khi đăng nhập thành công
+            
             Cookie failedAttemptCookie = new Cookie("failedAttempt_" + username, "0");
             Cookie lockTimeCookie = new Cookie("lockTime_" + username, "0");
             failedAttemptCookie.setMaxAge(0); // Xóa cookie
