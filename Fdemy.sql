@@ -138,3 +138,31 @@ VALUES
 INSERT INTO Users (role_id, username, password, full_name, email, birth_date, image, phone_number, address, created_at, banned)
 VALUES 
 (2, 'thanh', '123', 'John Doe', 'john.doe@example.com', '1990-05-15', NULL, '0987654321', '456 John Street', GETDATE(), 0)
+
+
+-- update 27/05
+CREATE TABLE Experts (
+    expert_id INT IDENTITY(1, 1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    description NVARCHAR(MAX) NOT NULL,
+    certification NVARCHAR(MAX), -- Missing comma added here
+    CONSTRAINT FK_Experts_Users FOREIGN KEY (user_id) REFERENCES Users (user_id)
+);
+
+CREATE TABLE ExpertCourses (
+    expert_id INT NOT NULL,
+    course_id INT NOT NULL,
+    CONSTRAINT FK_ExpertCourses_Experts FOREIGN KEY (expert_id) REFERENCES Experts (expert_id),
+    CONSTRAINT FK_ExpertCourses_Courses FOREIGN KEY (course_id) REFERENCES Courses (course_id),
+    CONSTRAINT PK_ExpertCourses PRIMARY KEY (expert_id, course_id)
+);
+
+INSERT INTO Users (role_id, username, password, full_name, email, birth_date, image, phone_number, address, created_at, banned)
+VALUES (3, 'ranga_karanam', 'ranga_karaman', 'ranga', 'ranga@example.com', '1980-01-01', NULL, '1234567890', '123 Tech Street', GETDATE(), 0);
+
+INSERT INTO Experts (user_id, description, certification)
+VALUES (
+    (SELECT user_id FROM Users WHERE username = 'ranga_karanam'),
+    'Ranga Karanam, the founder of in28minutes, has 2 decades of experience with technology - architecture, design, and programming. We are helping learners take their first steps into modern cloud native technology and gain expertise on AWS, Azure, Google Cloud, Docker, Kubernetes amongst others.\n\nOur happiest moments are when learners tag us on LinkedIn or reach out to us with their stories of getting their first job, getting a promotion, or a big raise.',
+    'Ranga is multi-cloud certified - Google Cloud Certified Professional Cloud Architect, AWS Certified Solutions Architect Associate, Google Cloud Certified Associate Cloud Engineer, AWS Certified Developer Associate, AWS Certified Cloud Practitioner, Azure Fundamentals Certified AZ-900, DP-900 and AI-900.'
+);
