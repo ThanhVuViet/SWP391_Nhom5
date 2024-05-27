@@ -26,7 +26,7 @@ CREATE TABLE Users (
     image VARCHAR(255) NULL,
     phone_number VARCHAR(20) NULL,
     address NVARCHAR(255) NULL,
-    created_at DATETIME NOT NULL,
+    created_at DATETIME DEFAULT GETDATE(),
     banned BIT NOT NULL DEFAULT 0,
     CONSTRAINT FK_Users_Roles FOREIGN KEY (role_id) REFERENCES Roles (role_id)
 );
@@ -48,7 +48,7 @@ CREATE TABLE Courses (
     price DECIMAL(10, 2) NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NULL,
---    deleted BIT NOT NULL DEFAULT 0,
+	[status] NVARCHAR(10) NOT NULL,
 	CONSTRAINT FK_Courses_Users FOREIGN KEY (owner_id) REFERENCES Users (user_id),
 	CONSTRAINT FK_Courses_category FOREIGN KEY (category_id) REFERENCES Categories (category_id)
 
@@ -122,6 +122,9 @@ CREATE TABLE Purchases (
     CONSTRAINT FK_Purchases_Courses FOREIGN KEY (course_id) REFERENCES Courses (course_id)
 );
 
+INSERT INTO Roles (name)
+VALUES ('Admin'), ('User'), ('Expert');
+
 
 INSERT INTO Users (role_id, username, password, full_name, email, birth_date, image, phone_number, address, created_at, banned)
 VALUES 
@@ -135,11 +138,3 @@ VALUES
 INSERT INTO Users (role_id, username, password, full_name, email, birth_date, image, phone_number, address, created_at, banned)
 VALUES 
 (2, 'thanh', '123', 'John Doe', 'john.doe@example.com', '1990-05-15', NULL, '0987654321', '456 John Street', GETDATE(), 0)
-
-INSERT INTO Roles (name)
-VALUES ('Admin'), ('User'), ('Expert');
-
-select * from Roles
-select * from Users
-
-select * from Users u where  u.username = 'john_doe' and u.password = 'password123'
