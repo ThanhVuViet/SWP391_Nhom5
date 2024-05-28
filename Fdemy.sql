@@ -123,7 +123,7 @@ CREATE TABLE Purchases (
 );
 
 INSERT INTO Roles (name)
-VALUES ('Admin'), ('User'), ('Expert');
+VALUES ('Admin'), ('Customer'), ('Expert');
 
 
 INSERT INTO Users (role_id, username, password, full_name, email, birth_date, image, phone_number, address, created_at, banned)
