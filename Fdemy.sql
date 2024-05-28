@@ -42,8 +42,7 @@ CREATE TABLE Categories (
 CREATE TABLE Courses (
     course_id INT IDENTITY(1, 1) PRIMARY KEY,
     title NVARCHAR(100) NOT NULL,
-	owner_id INT NOT NULL,
-	category_id INT,
+    category_id INT,
     description NVARCHAR(MAX) NULL,
     price DECIMAL(10, 2) NOT NULL,
     created_at DATETIME NOT NULL,
