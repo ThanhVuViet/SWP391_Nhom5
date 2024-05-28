@@ -76,75 +76,81 @@ public class LoginControl extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        String username = request.getParameter("email");
-        String password = request.getParameter("password");
-        
-        dao dao = new dao();
-        Users user = dao.loginUser(username);
-        if (user == null) {
-            request.setAttribute("loginFailed", "This username doesn't exist");
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    String username = request.getParameter("email");
+    String password = request.getParameter("password");
+    
+
+    dao dao = new dao();
+    Users user = dao.loginUser(username); 
+
+    if (user == null) {
+        request.setAttribute("WrongAccount", "This username doesn't exist");
+        request.setAttribute("username", username);
+        request.setAttribute("password", password);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+        return;
+    }
+
+    long lockTime = dao.getLockTime(username);
+    long currentTime = System.currentTimeMillis();
+
+    // Kiểm tra nếu tài khoản vẫn bị khóa
+    if (lockTime > currentTime) {
+        request.setAttribute("AccountLocked", "This account is locked. Try again later.");
+        request.setAttribute("username", username);
+        request.setAttribute("password", password);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+        return;
+    }
+
+  
+    Users loggedInUser = dao.login(username, password);
+    if (loggedInUser == null) {
+        dao.updateFailedAttempt(username);
+
+        int failedAttempt = dao.getFailedAttempt(username);
+        System.out.println("FailedAttempt: " + failedAttempt);
+        if (failedAttempt >= 3) {
+            request.setAttribute("loginFailedThreeTime", "You forgot the password?");
             request.setAttribute("username", username);
             request.setAttribute("password", password);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
         }
-        
-        int failedAttempt = user.getFailedAttempt();
-        long lockTime = user.getLockTime();
-
-        long currentTime = System.currentTimeMillis();
-        if (lockTime > currentTime) {
-            request.setAttribute("AccountLocked", "This account is locked. Try again later.");
-            request.setAttribute("username", username);
-            request.setAttribute("password", password);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
+        if (failedAttempt >= 5) {
+            lockTime = currentTime + (24 * 60 * 60 * 1000); // 24 giờ
+            dao.updateLockTime(username, lockTime);
         }
+        request.setAttribute("failedAttempt", failedAttempt);
+        request.setAttribute("loginFailed", "Invalid username or password.");
+        request.setAttribute("username", username);
+        request.setAttribute("password", password);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+    } else {
+        dao.resetFailedAttempt(username);  // Reset số lần thử
+        dao.updateLockTime(username, 0);   // Reset thời gian khóa
 
-        Users a = dao.login(username, password);
-        if (a == null) {
-           failedAttempt = failedAttempt+1;
-            if (failedAttempt >= 3) {
-                request.setAttribute("loginFailedThreeTime", "You forgot the password?");
-                request.setAttribute("username", username);
-                request.setAttribute("password", password);         
-            }
-            if (failedAttempt == 5) {
-                lockTime = currentTime + (24 * 60 * 60 * 1000); 
-                dao.updateLockTime(username, lockTime);
-            }           
-            dao.updateFailedAttempt(username, failedAttempt);
-            request.setAttribute("failedAttempt", failedAttempt);
-            request.setAttribute("loginFailed", "Invalid username or password.");
-            request.setAttribute("username", username);
-            request.setAttribute("password", password);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else {
-            dao.updateFailedAttempt(username, 0);
-            dao.updateLockTime(username, 0);
+        HttpSession session = request.getSession();
+        session.setAttribute("acc", loggedInUser);  // Sử dụng đối tượng người dùng đã đăng nhập
+        session.setMaxInactiveInterval(60 * 60 * 24);
 
-            HttpSession session = request.getSession();
-            session.setAttribute("acc", a);
-            session.setMaxInactiveInterval(60 * 60 * 24);
-
-            Cookie u = new Cookie("userC", username);
-            Cookie p = new Cookie("passC", password);
-            u.setMaxAge(60 * 60 * 24);
-            p.setMaxAge(60 * 60 * 24);
-            response.addCookie(p);
-            response.addCookie(u);
-
-            if (a.getRoleId() == 1) {
-                response.sendRedirect("admin");
-            } else if (a.getRoleId() == 2) {
-                response.sendRedirect("home.jsp");
-            } else if (a.getRoleId() == 3) {
-                response.sendRedirect("expert");
-            }
+        Cookie u = new Cookie("userC", username);
+        Cookie p = new Cookie("passC", password);
+        u.setMaxAge(60 * 60 * 24);
+        p.setMaxAge(60 * 60 * 24);
+        response.addCookie(p);
+        response.addCookie(u);
+        if (loggedInUser.getRoleId() == 1) {
+            response.sendRedirect("admin");
+        } else if (loggedInUser.getRoleId() == 2) {
+            response.sendRedirect("home.jsp");
+        } else if (loggedInUser.getRoleId() == 3) {
+            response.sendRedirect("expert");
         }
     }
+}
+
+
 
     /** 
      * Returns a short description of the servlet.
