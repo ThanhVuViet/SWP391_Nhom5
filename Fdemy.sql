@@ -166,3 +166,23 @@ VALUES (
     'Ranga Karanam, the founder of in28minutes, has 2 decades of experience with technology - architecture, design, and programming. We are helping learners take their first steps into modern cloud native technology and gain expertise on AWS, Azure, Google Cloud, Docker, Kubernetes amongst others.\n\nOur happiest moments are when learners tag us on LinkedIn or reach out to us with their stories of getting their first job, getting a promotion, or a big raise.',
     'Ranga is multi-cloud certified - Google Cloud Certified Professional Cloud Architect, AWS Certified Solutions Architect Associate, Google Cloud Certified Associate Cloud Engineer, AWS Certified Developer Associate, AWS Certified Cloud Practitioner, Azure Fundamentals Certified AZ-900, DP-900 and AI-900.'
 );
+select * from Experts
+delete from Expert e
+where e.expert_id = 2
+select * from Users
+
+select * from Experts e
+join Users u on e.user_id = u.user_id
+where expert_id = 1
+
+ALTER TABLE Users ADD failedAttempt INT DEFAULT 0;
+ALTER TABLE Users ADD lockTime BIGINT DEFAULT 0;
+
+
+SELECT * FROM Users where username='thanhvu'
+
+SELECT u.failedAttempt FROM Users u where username='thanhvu'
+SELECT u.lockTime FROM Users u where username ='thanhvu'
+UPDATE Users SET failedAttempt = 0, lockTime = 0;
+UPDATE Users SET lockTime =1 WHERE username = 'thanhvu'
+update users set failedAttempt = 1 where username = 'thanhvu'
