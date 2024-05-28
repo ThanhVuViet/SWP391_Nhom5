@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <head>
     <meta charset="utf-8">
@@ -59,7 +59,7 @@
     </style>
 </head>
 
-<body>
+<body > 
     <!-- Spinner Start -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -79,7 +79,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="index.html" class="nav-item nav-link">Home</a>
-                <a href="about.html" class="nav-item nav-link">About</a>
+                <a href="about.html" class="nav-item nav-link active">About</a>
                 <a href="courses.html" class="nav-item nav-link">Courses</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -98,39 +98,75 @@
 
     <!-- Login Form Start -->
     <div class="content">
-        <div class="login-container">
-            <div class="bg-white rounded p-5">
-                <h3 class="mb-4 text-center">Login to your account</h3>
-                <form action="login" method="post">
-                    <!-- Check if there's a loginFailed attribute and display the error message -->
-                    <% if (request.getAttribute("loginFailed") != null) { %>
-                        <div class="alert alert-danger" role="alert">
-                            <%= request.getAttribute("loginFailed") %>
-                        </div>
-                    <% } %>
-                    <div class="form-group mb-3">
-                        <label for="email">Username</label>
-                        
-                        <input type="" class="form-control" value="<%= request.getAttribute("username") %>" name="email" placeholder="Enter email" required>
+    <div class="login-container">
+        <div class="bg-white rounded p-5">
+            <h3 class="mb-4 text-center">Login to your account</h3>
+            <form  action="login" method="post">
+                <% 
+                    Integer failedAttempt = (Integer) request.getAttribute("failedAttempt");
+                    if (request.getAttribute("loginFailed") != null) { 
+                %>
+                <% if (failedAttempt != null && failedAttempt < 5) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= request.getAttribute("loginFailed") %> (Failed attempts: <%= failedAttempt %>)
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="password">Password</label>
-                        <input type="password" value="<%= request.getAttribute("password") %>" class="form-control" name="password" placeholder="Password" required>
+                <% } %>
+                <% } %>
+
+                <% if (request.getAttribute("AccountLocked") != null) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= request.getAttribute("AccountLocked") %>  
                     </div>
-                    <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
-                </form>
-               <div class="text-center mb-3">
-                    <p>Or login with</p>
-                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/SWP391_Group5/LoginGoogle&response_type=code&client_id=826239897772-hjalfh6l6mrrl73029j0fqs9lis7ffjo.apps.googleusercontent.com&access_type=online&prompt=consent" class="btn btn-danger w-100 mb-2">Login with Google</a>
-                    <a href="#" class="btn btn-primary w-100">Login with Facebook</a>
-</div>
-                <div class="mt-3 text-center">
-                    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+                <% } %>
+
+                <% if (failedAttempt != null && failedAttempt == 5) { %>
+                    <div class="alert alert-danger" role="alert">
+                        Your account has been locked due to multiple failed login attempts.
+                    </div>
+                <% } %>
+
+                <div class="form-group mb-3">
+                    <label for="email">Username</label>
+                    <input type="text" class="form-control" value="<%= request.getAttribute("username") != null ? request.getAttribute("username") : "" %>" name="email" placeholder="Enter email" required maxlength="16">
                 </div>
+                <div class="form-group mb-3">
+                    <label for="password">Password</label>
+                    <input type="password" value="<%= request.getAttribute("password") != null ? request.getAttribute("password") : "" %>" class="form-control" id="password" name="password" oninput="validateMaxPasswordLength()" placeholder="Password" required maxlength="16">
+                </div>
+                <div id="mess" style="display: none; color: red;">
+                    Password must be at most 16 characters long.
+                </div>
+                <div class="form-group mb-3">
+                    <input type="checkbox" id="showPasswordCheckbox" onclick="showPassword()"> Show Password
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                <button type="reset" class="btn btn-secondary w-100 mb-3" onclick="resetForm()">Reset</button> <!-- Nút reset -->
+            </form>
+            
+            <div class="text-center mb-3">
+                <p>Or login with</p>
+                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/SWP391_Group5/LoginGoogle&response_type=code&client_id=826239897772-hjalfh6l6mrrl73029j0fqs9lis7ffjo.apps.googleusercontent.com&access_type=online&prompt=consent" class="btn btn-danger w-100 mb-2">Login with Google</a>
             </div>
+            
+            <div class="mt-3 text-center">
+                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+            </div>
+
+            <% if (request.getAttribute("loginFailedThreeTime") != null) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= request.getAttribute("loginFailedThreeTime") %>
+                    <a href="forgotPassword" class="alert-link">Forgot password?</a>
+                </div>
+            <% } else { %>
+                <div class="mt-3 text-center">
+                    <p>Forgot the password? <a href="forgotPassword">Forgot password</a></p>
+                </div>
+            <% } %>
         </div>
     </div>
-    
+</div>
+
+
     <!-- Login Form End -->
 
     <!-- Footer Start -->
@@ -227,6 +263,28 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-</body>
 
+    <script>
+        function validateMaxPasswordLength() {
+            var lengthPassword = document.getElementById("password").value.length;
+            var mess = document.getElementById("mess");
+            if (lengthPassword >= 16) {
+                mess.style.display = "block";
+            } else {
+                mess.style.display = "none";
+            }
+        }
+
+        function showPassword() {
+            var password = document.getElementById("password");
+            if (password.type === "password") {
+                password.type = "text";
+            } else {
+                password.type = "password";
+            }
+        }
+
+       
+    </script>
+</body>
 </html>
