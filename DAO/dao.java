@@ -167,16 +167,16 @@ public class dao extends MyDAO {
 
     public Users findUsersByName(String user) {
         String query = "SELECT * FROM Users where username=? ";
-
+        
         try {
 
             ps = con.prepareStatement(query);
             ps.setString(1, user);
-
+            
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                return new Users(
+                return  new Users(
                         rs.getInt("user_Id"),
                         rs.getInt("role_Id"),
                         rs.getString("username"),
@@ -191,6 +191,8 @@ public class dao extends MyDAO {
                         rs.getBoolean("banned"),
                         rs.getInt("failedAttempt"),
                         rs.getLong("lockTime")
+                        
+            
                 );
             }
         } catch (Exception e) {
@@ -199,12 +201,11 @@ public class dao extends MyDAO {
 
         return null;
     }
-
-    public int getFailedAttempt(String user) {
-        String query = "SELECT u.failedAttempt FROM Users u where username= ? ";
+    public int getFailedAttempt (String user ) {
+         String query = "SELECT u.failedAttempt FROM Users u where username= ? ";
         try {
-
-            ps = con.prepareStatement(query);
+            
+             ps = con.prepareStatement(query);
             ps.setString(1, user);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -215,64 +216,67 @@ public class dao extends MyDAO {
         }
         return 0;
     }
-
-    public long getLockTime(String user) {
+    public long getLockTime( String user) {
         String query = "SELECT u.lockTime FROM Users u where username=? ";
         try {
-
-            ps = con.prepareStatement(query);
+             
+             ps = con.prepareStatement(query);
             ps.setString(1, user);
             rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getInt("lockTime");
+                return rs.getLong("lockTime");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
     }
-
-    public void updateFailedAttempt(String user, int failedAttempt) {
-        String query = "update users set failedAttempt = ? where username = ? ";
-        try {
-
-            ps = con.prepareStatement(query);
-            ps.setInt(1, failedAttempt);
-            ps.setString(2, user);
-            ps.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+   public void updateFailedAttempt(String user) {
+    String query = "UPDATE users SET failedAttempt = failedAttempt + 1 WHERE username = ?";
+    try {
+        ps = con.prepareStatement(query);
+        ps.setString(1, user);
+        ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-
-    public void updateLockTime(String user, long lockTime) {
-        String query = "UPDATE Users SET lockTime = ? WHERE username = ? ";
+    
+}
+    public void resetFailedAttempt(String user) {
+        String query = "UPDATE users SET failedAttempt = 0 WHERE username = ?";
         try {
-
-            ps = con.prepareStatement(query);
-            ps.setLong(1, lockTime);
-            ps.setString(2, user);
-            ps.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public Users loginUser(String user) {
-        String query = "SELECT * FROM Users where username=? ";
-
-        try {
-
             ps = con.prepareStatement(query);
             ps.setString(1, user);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+     public void updateLockTime (String user, long lockTime) {
+          String query = "UPDATE Users SET lockTime = ? WHERE username = ? ";
+         try {
+            
+             ps = con.prepareStatement(query);
+             ps.setLong(1, lockTime);
+            ps.setString(2, user);
+             ps.executeUpdate();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+      
+    }
+      public Users loginUser(String user) {
+        String query = "SELECT * FROM Users where username=? ";
+        
+        try {
+
+            ps = con.prepareStatement(query);
+            ps.setString(1, user);     
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                return new Users(
+                return  new Users(
                         rs.getInt("user_Id"),
                         rs.getInt("role_Id"),
                         rs.getString("username"),
@@ -287,6 +291,8 @@ public class dao extends MyDAO {
                         rs.getBoolean("banned"),
                         rs.getInt("failedAttempt"),
                         rs.getLong("lockTime")
+                        
+            
                 );
             }
         } catch (Exception e) {
@@ -295,6 +301,7 @@ public class dao extends MyDAO {
 
         return null;
     }
+
 
     public boolean isExistMail(String email) {
         String query = "SELECT *\n"
