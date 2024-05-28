@@ -59,6 +59,7 @@ public class ForgotPassword extends HttpServlet {
         if (!isMailExist) {
             request.setAttribute("error", "Email does not exist !");
             url = "forgotPassword.jsp";
+            return url;
         }
         //generate random number
         String random = CommonUtils.generateSixRandomNumber();
@@ -93,7 +94,7 @@ public class ForgotPassword extends HttpServlet {
         }else {
             //khong dung OTP => set loi va bao sai
             request.setAttribute("error", "Wrong OTP");
-            url = "forgotPassword.jsp";
+            url = "enterOTP.jsp";
         }
         return url;
     }
