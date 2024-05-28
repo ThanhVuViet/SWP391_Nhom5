@@ -104,7 +104,7 @@
                         <div class="form-group mb-3">
                             <label for="email"><b>New Password</b></label>
 
-                            <input type="password" class="form-control" name="newPassword" placeholder="Enter email" required>
+                            <input type="password" class="form-control" name="newPassword" placeholder="Enter new password" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="password"><b>Confirm password</b></label>
