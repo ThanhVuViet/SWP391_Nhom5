@@ -22,7 +22,7 @@ public class LoginControl extends HttpServlet {
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
-     * @param response servlet response
+     * @param response servlet request
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
@@ -80,19 +80,19 @@ public class LoginControl extends HttpServlet {
     throws ServletException, IOException {
         String username = request.getParameter("email");
         String password = request.getParameter("password");
-        int failedAttempt = 0;
-        long lockTime = 0;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("failedAttempt_" + username)) {
-                    failedAttempt = Integer.parseInt(cookie.getValue());
-                }
-                if (cookie.getName().equals("lockTime_" + username)) {
-                    lockTime = Long.parseLong(cookie.getValue());
-                }
-            }
+        
+        dao dao = new dao();
+        Users user = dao.loginUser(username);
+        if (user == null) {
+            request.setAttribute("loginFailed", "This username doesn't exist");
+            request.setAttribute("username", username);
+            request.setAttribute("password", password);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
         }
+        
+        int failedAttempt = user.getFailedAttempt();
+        long lockTime = user.getLockTime();
 
         long currentTime = System.currentTimeMillis();
         if (lockTime > currentTime) {
@@ -103,39 +103,27 @@ public class LoginControl extends HttpServlet {
             return;
         }
 
-        dao dao = new dao();
         Users a = dao.login(username, password);
         if (a == null) {
-            failedAttempt++;
-            if (failedAttempt >= 3 ) {
+           failedAttempt = failedAttempt+1;
+            if (failedAttempt >= 3) {
                 request.setAttribute("loginFailedThreeTime", "You forgot the password?");
                 request.setAttribute("username", username);
-                request.setAttribute("password", password);
-               
+                request.setAttribute("password", password);         
             }
             if (failedAttempt == 5) {
                 lockTime = currentTime + (24 * 60 * 60 * 1000); 
-                
-            }
-            Cookie failedAttemptCookie = new Cookie("failedAttempt_" + username, String.valueOf(failedAttempt));
-            Cookie lockTimeCookie = new Cookie("lockTime_" + username, String.valueOf(lockTime));
-            failedAttemptCookie.setMaxAge(24 * 60 * 60);
-            lockTimeCookie.setMaxAge(24 * 60 * 60);
-            response.addCookie(failedAttemptCookie);
-            response.addCookie(lockTimeCookie);
+                dao.updateLockTime(username, lockTime);
+            }           
+            dao.updateFailedAttempt(username, failedAttempt);
             request.setAttribute("failedAttempt", failedAttempt);
             request.setAttribute("loginFailed", "Invalid username or password.");
             request.setAttribute("username", username);
             request.setAttribute("password", password);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
-            
-            Cookie failedAttemptCookie = new Cookie("failedAttempt_" + username, "0");
-            Cookie lockTimeCookie = new Cookie("lockTime_" + username, "0");
-            failedAttemptCookie.setMaxAge(0); // Xóa cookie
-            lockTimeCookie.setMaxAge(0); // Xóa cookie
-            response.addCookie(failedAttemptCookie);
-            response.addCookie(lockTimeCookie);
+            dao.updateFailedAttempt(username, 0);
+            dao.updateLockTime(username, 0);
 
             HttpSession session = request.getSession();
             session.setAttribute("acc", a);
@@ -166,5 +154,4 @@ public class LoginControl extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
