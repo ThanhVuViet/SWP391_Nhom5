@@ -71,32 +71,48 @@ public class SignUpControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         dao u = new dao();
-        boolean duplicate = false;
-        String password = (String) request.getAttribute("password");
-        String rePassword = (String)request.getAttribute("rePassword");
-        request.setAttribute("wrongRePassword", false);
-        request.setAttribute("duplicateUsername", false);
-        request.setAttribute("duplicateEmail", false);
-        if (!rePassword.equals(password)) {
-            request.setAttribute("wrongRePassword", true);
-            duplicate = true;
+        String username = (String) request.getAttribute("username"),
+                   password = (String) request.getAttribute("password"), 
+                   rePassword = (String)request.getAttribute("rePassword"),
+                   fullName = (String) request.getAttribute("fullName"),
+                   email = (String) request.getAttribute("email");
+        Validation v = new Validation();
+        boolean success = true;
+        String errorNote = ",";
+        //Checking username
+        if (!v.isValidUsername(username)) {
+            errorNote += "invalidUsername,";
+            success = false;
+        } else if (u.doesUsernameExist(username)) {
+            errorNote += "duplicateUsername,";
+            success = false;
         }
-        if (!u.doesUsernameExist((String)request.getAttribute("username"))) {
-            request.setAttribute("duplicateUsername", true);
-            duplicate = true;
+        //Checking password
+        if (!v.isValidPassword(password)) {
+            errorNote += "invalidPassword,";
+            success = false;
         }
-        if (!u.doesEmailExist((String) request.getAttribute("email"))) {
-            request.setAttribute("duplicateEmail", true);
-            duplicate = true;
+        if (!password.endsWith(rePassword)) {
+            errorNote += "wrongRePassword";
         }
-        if (!duplicate) {
-                u.addNewUser(  (int) request.getAttribute("roleID"),
-                                            (String) request.getAttribute("username"),
-                                            (String) request.getAttribute("password"), 
-                                            (String) request.getAttribute("fullName"),
-                                            (String) request.getAttribute("email"));
+        //Checking fullname
+        if (!v.isValidFullName(fullName)) {
+            errorNote += "invalidFullName,";
+            success = false;
+        }
+        //Checking email
+        if (!v.isValidEmail(email)) {
+            errorNote += "invalidEmail,";
+            success = false;
+        } else if (u.doesEmailExist(email)) {
+            errorNote += "duplicateEmail,";
+            success = false;
+        }
+        if (success) {
+                u.addNewUser(2, username, password, fullName, email);
                 response.sendRedirect("login");
         } else {
+            request.setAttribute("errorNote", errorNote);
             request.getRequestDispatcher("signup.jsp").forward(request, response);
         }
     }
