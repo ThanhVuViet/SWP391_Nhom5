@@ -23,9 +23,11 @@ public class Users {
     private String address;
     private Date createdAt;
     private boolean banned;
+    private int failedAttempt;
+    private long lockTime;
 
     // Constructor
-    public Users(int userId, int roleId, String username, String password, String fullName, String email, Date birthDate, String image, String phoneNumber, String address, Date createdAt, boolean banned) {
+    public Users(int userId, int roleId, String username, String password, String fullName, String email, Date birthDate, String image, String phoneNumber, String address, Date createdAt, boolean banned, int failedAttempt, long  lockTime) {
         this.userId = userId;
         this.roleId = roleId;
         this.username = username;
@@ -39,6 +41,15 @@ public class Users {
         this.createdAt = createdAt;
         this.banned = banned;
     }
+
+    public int getFailedAttempt() {
+        return failedAttempt;
+    }
+
+    public long getLockTime() {
+        return lockTime;
+    }
+    
 
     // Getters and Setters
     public int getUserId() {
@@ -87,6 +98,14 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setFailedAttempt(int failedAttempt) {
+        this.failedAttempt = failedAttempt;
+    }
+
+    public void setLockTime(long lockTime) {
+        this.lockTime = lockTime;
     }
 
     public Date getBirthDate() {
