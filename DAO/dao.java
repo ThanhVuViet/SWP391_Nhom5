@@ -341,4 +341,30 @@ public class dao extends MyDAO {
         
     }
 
+public boolean ChangePass(int userId, String newPass) throws SQLException {
+
+        String query = "UPDATE Users SET password = ? WHERE user_Id = ?";
+
+        try {
+
+            ps = con.prepareStatement(query);
+
+            ps.setString(1, newPass);
+
+            ps.setInt(2, userId);
+
+            return ps.executeQuery() > 0;
+
+            
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+
+        return false;
+
+    }
+
 }
