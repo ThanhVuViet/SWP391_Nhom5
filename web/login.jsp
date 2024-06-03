@@ -267,7 +267,7 @@
         function validateMaxPasswordLength() {
             var lengthPassword = document.getElementById("password").value.length;
             var mess = document.getElementById("mess");
-            if (lengthPassword >= 16) {
+            if (lengthPassword == 16) {
                 mess.style.display = "block";
             } else {
                 mess.style.display = "none";
@@ -284,8 +284,6 @@
         }
 
         function resetForm() {
-             
-           
             var showPasswordCheckbox = document.getElementById("showPasswordCheckbox");
             if (showPasswordCheckbox) {
                 showPasswordCheckbox.checked = false;
@@ -294,15 +292,11 @@
             if (passwordField) {
                 passwordField.type = "password";
             }
-              var alerts = document.querySelectorAll('.alert');
+            var alerts = document.querySelectorAll('.alert');
             alerts.forEach(function(alert) {
                 alert.parentNode.removeChild(alert);
             });
         }
-            
-        }
-     
-       
     </script>
 </body>
 </html>
