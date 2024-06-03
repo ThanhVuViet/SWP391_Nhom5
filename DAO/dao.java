@@ -90,6 +90,43 @@ public class dao extends MyDAO {
 
         return null;
     }
+    public boolean isExistMail(String email) {
+        String query = "SELECT *\n"
+                + "  FROM [Users]\n"
+                + "  where email = ?";
+
+        try {
+
+            ps = con.prepareStatement(query);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exceptions appropriately in your application
+        }
+        return false;
+    }
+
+    public void updatePasswordByMail(String mailReset, String password) {
+        String query = "UPDATE [Users]\n"
+                + "   SET \n"
+                + "      [password] = ?\n"
+                + " WHERE email = ?";
+        try {
+
+            ps = con.prepareStatement(query);
+            ps.setObject(1, password);
+            ps.setObject(2, mailReset);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exceptions appropriately in your application
+        }
+        
+    }
 
     public List<Expert> getExpert() {
         String query = "SELECT * FROM Experts e JOIN Users u ON e.user_id = u.user_id";
