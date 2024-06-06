@@ -396,6 +396,34 @@ public Map<Integer, List<String>> categoriesExpert() {
         return catMap;
 
     }
+public Map<Integer, List<String>> expertCourse() {
+        String query = "select u.username, c.title, c.course_id from ExpertCourses ec\n" +
+"                 join Experts e on ec.expert_id = e.expert_id\n" +
+"                 join Courses c on ec.course_id = c.course_id\n" +
+"				 join Users u on e.user_id = u.user_id";
+        Map<Integer, List<String>> catMap = new HashMap<>();
+        try {
+
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int courseId = rs.getInt("course_id");
+                String expertName = rs.getString("username");
+                if (!catMap.containsKey(courseId)) {
+                    catMap.put(courseId, new ArrayList<>());
+                }
+                catMap.get(courseId).add(expertName);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return catMap;
+
+    }
+
 
     public Map<Integer, List<Course>> expertCoures() {
         String query = "select * from ExpertCourses ec\n"
@@ -599,5 +627,66 @@ public List<Category> getCategories() {
 
         return categorylist;
     }
+    public List<Users> getUsers() {
+        String query = "SELECT * FROM Users";
+        List<Users> e = new ArrayList<>();
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
 
+            while (rs.next()) { // Use while instead of if
+                
+                int userId = rs.getInt("user_id");
+               
+                int roleId = rs.getInt("role_id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                Date birthDate = rs.getDate("birth_date");
+                String image = rs.getString("image");
+                String phoneNumber = rs.getString("phone_number");
+                String address = rs.getString("address");
+                Date createdAt = rs.getDate("created_at");
+                boolean banned = rs.getBoolean("banned");
+                int failedAttempt = rs.getInt("failedAttempt");
+                long lockTime = rs.getLong("lockTime");
+
+                Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
+              
+                e.add(user);
+            }
+        } catch (Exception s) {
+            s.printStackTrace(); // Handle exceptions appropriately in your application
+        }
+
+        return e;
+    }
+    public List<Course> getCourse() {
+        String query = "SELECT * FROM Courses";
+        List<Course> e = new ArrayList<>();
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) { // Use while instead of if
+                
+                int courseID = rs.getInt("course_id");
+                String title = rs.getString("title");
+                Integer categoryId = rs.getInt("category_id");
+                String description = rs.getString("description");
+                BigDecimal price = rs.getBigDecimal("price");
+                Date createdAt = rs.getDate("created_at");
+                Date updatedAt = rs.getDate("updated_at");
+                Course course = new Course(courseID, title, categoryId, description, price, createdAt, updatedAt);
+                e.add(course);
+
+            }
+        } catch (Exception s) {
+            s.printStackTrace(); // Handle exceptions appropriately in your application
+        }
+
+        return e;
+    }
+    
 }
