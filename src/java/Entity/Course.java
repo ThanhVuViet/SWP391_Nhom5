@@ -12,9 +12,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class Course {
+
     private int courseId;
     private String title;
-    
+
     private Integer categoryId;
     private String description;
     private BigDecimal price;
@@ -22,10 +23,13 @@ public class Course {
     private Date updatedAt;
 
     // Constructor
-    public Course(int courseId, String title,  Integer categoryId, String description, BigDecimal price, Date createdAt, Date updatedAt) {
+    public Course() {
+    }
+
+    public Course(int courseId, String title, Integer categoryId, String description, BigDecimal price, Date createdAt, Date updatedAt) {
         this.courseId = courseId;
         this.title = title;
-       
+
         this.categoryId = categoryId;
         this.description = description;
         this.price = price;
@@ -49,8 +53,6 @@ public class Course {
     public void setTitle(String title) {
         this.title = title;
     }
-
-   
 
     public Integer getCategoryId() {
         return categoryId;
@@ -91,4 +93,10 @@ public class Course {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "Course{" + "courseId=" + courseId + ", title=" + title + ", categoryId=" + categoryId + ", description=" + description + ", price=" + price + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
+    }
+
 }

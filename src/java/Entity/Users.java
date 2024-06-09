@@ -11,6 +11,7 @@ package Entity;
 import java.util.Date;
 
 public class Users {
+
     private int userId;
     private int roleId;
     private String username;
@@ -27,7 +28,10 @@ public class Users {
     private long lockTime;
 
     // Constructor
-    public Users(int userId, int roleId, String username, String password, String fullName, String email, Date birthDate, String image, String phoneNumber, String address, Date createdAt, boolean banned, int failedAttempt, long  lockTime) {
+    public Users() {
+    }
+
+    public Users(int userId, int roleId, String username, String password, String fullName, String email, Date birthDate, String image, String phoneNumber, String address, Date createdAt, boolean banned, int failedAttempt, long lockTime) {
         this.userId = userId;
         this.roleId = roleId;
         this.username = username;
@@ -49,7 +53,6 @@ public class Users {
     public long getLockTime() {
         return lockTime;
     }
-    
 
     // Getters and Setters
     public int getUserId() {
@@ -158,19 +161,19 @@ public class Users {
 
     @Override
     public String toString() {
-        return "Users{" +
-                "userId=" + userId +
-                ", roleId=" + roleId +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", birthDate=" + birthDate +
-                ", image='" + image + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
-                ", createdAt=" + createdAt +
-                ", banned=" + banned +
-                '}';
+        return "Users{"
+                + "userId=" + userId
+                + ", roleId=" + roleId
+                + ", username='" + username + '\''
+                + ", password='" + password + '\''
+                + ", fullName='" + fullName + '\''
+                + ", email='" + email + '\''
+                + ", birthDate=" + birthDate
+                + ", image='" + image + '\''
+                + ", phoneNumber='" + phoneNumber + '\''
+                + ", address='" + address + '\''
+                + ", createdAt=" + createdAt
+                + ", banned=" + banned
+                + '}';
     }
 }
