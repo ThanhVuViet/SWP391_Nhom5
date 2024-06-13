@@ -129,7 +129,7 @@
                     <label for="email">Username</label>
                     <input type="text" class="form-control" value="<%= request.getAttribute("username") != null ? request.getAttribute("username") : "" %>" name="email" placeholder="Enter email" required maxlength="16">
                 </div>
-                <div class="form-group mb-3">
+                 <div class="form-group mb-3">
                     <label for="password">Password</label>
                     <input type="password" value="<%= request.getAttribute("password") != null ? request.getAttribute("password") : "" %>" class="form-control" id="password" name="password" oninput="validateMaxPasswordLength()" placeholder="Password" required maxlength="16">
                 </div>
@@ -267,14 +267,14 @@
         function validateMaxPasswordLength() {
             var lengthPassword = document.getElementById("password").value.length;
             var mess = document.getElementById("mess");
-            if (lengthPassword == 16) {
+            if (lengthPassword >= 16) {
                 mess.style.display = "block";
             } else {
                 mess.style.display = "none";
             }
         }
 
-        function showPassword() {
+            function showPassword() {
             var password = document.getElementById("password");
             if (password.type === "password") {
                 password.type = "text";
@@ -284,6 +284,8 @@
         }
 
         function resetForm() {
+             
+           
             var showPasswordCheckbox = document.getElementById("showPasswordCheckbox");
             if (showPasswordCheckbox) {
                 showPasswordCheckbox.checked = false;
@@ -292,11 +294,15 @@
             if (passwordField) {
                 passwordField.type = "password";
             }
-            var alerts = document.querySelectorAll('.alert');
+              var alerts = document.querySelectorAll('.alert');
             alerts.forEach(function(alert) {
                 alert.parentNode.removeChild(alert);
             });
         }
+            
+        }
+     
+       
     </script>
 </body>
 </html>

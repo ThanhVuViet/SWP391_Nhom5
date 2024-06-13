@@ -136,33 +136,48 @@
                                     </thead>
                                     <tbody>
                                         <%
-                                            Map<Integer, List<String>> expertCourse = (Map<Integer, List<String>>) request.getAttribute("courseExpert");
-                                            int countCourse = 0;
-                                            ArrayList<Course> courseList = (ArrayList<Course>) request.getAttribute("courseList");
+                                            
+                                              Map<Integer, List<String>> courseCate = (Map<Integer, List<String>>) request.getAttribute("courseCate");
+    Map<Integer, List<String>> expertCourse = (Map<Integer, List<String>>) request.getAttribute("courseExpert");
+    int countCourse = 0;
+    ArrayList<Course> courseList = (ArrayList<Course>) request.getAttribute("courseList");
 
-                                            for (Course course : courseList) {
-                                                if (countCourse >= 2) {
-                                                    break;
-                                                }
-            
-                                                List<String> experts = expertCourse.get(course.getCourseId());
-                                                if (experts == null) {
-                                                    experts = new ArrayList<>();
-                                                }
-                                                StringBuilder categoriesStrBuilder = new StringBuilder();
-                                                for (int i = 0; i < experts.size(); i++) {
-                                                    categoriesStrBuilder.append(experts.get(i));
-                                                    if (i < experts.size() - 1) {
-                                                        categoriesStrBuilder.append(", ");
-                                                    }
-                                                }
-                                                String categoriesStr = categoriesStrBuilder.toString();
+    for (Course course : courseList) {
+        if (countCourse >= 2) {
+            break;
+        }
+
+        List<String> experts = expertCourse.get(course.getCourseId());
+        if (experts == null) {
+            experts = new ArrayList<>();
+        }
+        StringBuilder expertsStrBuilder = new StringBuilder();
+        for (int i = 0; i < experts.size(); i++) {
+            expertsStrBuilder.append(experts.get(i));
+            if (i < experts.size() - 1) {
+                expertsStrBuilder.append(", ");
+            }
+        }
+        String expertsStr = expertsStrBuilder.toString();
+
+        List<String> categories = courseCate.get(course.getCourseId());
+        StringBuilder categoriesStrBuilder = new StringBuilder();
+        if (categories != null) {
+            for (int i = 0; i < categories.size(); i++) {
+                categoriesStrBuilder.append(categories.get(i));
+                if (i < categories.size() - 1) {
+                    categoriesStrBuilder.append(", ");
+                }
+            }
+        }
+        String categoriesStr = categoriesStrBuilder.toString();
+                                                
                                         %>
                                         <tr>
                                             <td><%= course.getCourseId() %></td>
                                             <td><%= course.getTitle() %></td>
+                                            <td><%= expertsStr %></td>
                                             <td><%= categoriesStr %></td>
-                                            <td></td>
                                             <td><button class="btn btn-primary btn-sm">Edit</button> <button class="btn btn-danger btn-sm">Delete</button></td>
                                         </tr>
                                         <%
@@ -174,7 +189,7 @@
                                 </table>
                             </div>
                         </div>
-                        <a href="manage_course.html" class="btn btn-secondary">See More</a>
+                        <a href="CourseList" class="btn btn-secondary">See More</a>
                     </div>
                     <div id="customerManage" class="mt-5">
                         <h2>Customer Manage</h2>

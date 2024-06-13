@@ -6,9 +6,8 @@
 package control;
 
 import DAO.dao;
+import Entity.Category;
 import Entity.Course;
-import Entity.Expert;
-import Entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,7 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +23,8 @@ import java.util.Map;
  *
  * @author Admin
  */
-@WebServlet(name="adminControl", urlPatterns={"/adminControl"})
-public class adminControl extends HttpServlet {
+@WebServlet(name="CourseManage", urlPatterns={"/editCourse"})
+public class CourseManage extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -42,10 +41,10 @@ public class adminControl extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet adminControl</title>");  
+            out.println("<title>Servlet CourseManage</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet adminControl at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CourseManage at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,23 +61,26 @@ public class adminControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-          ArrayList<Expert> expertList = new ArrayList<>();
+         int courseID = Integer.parseInt(request.getParameter("courseId"));
         dao dao = new dao();
-        expertList = (ArrayList<Expert>) dao.getExpert();
-        Map<Integer, List<String>> expertCategories = dao.categoriesExpert();
-        ArrayList<Users> userList = (ArrayList<Users>) dao.getUsers();
-        ArrayList<Course> courseList = (ArrayList<Course>) dao.getCourse();
+        Course course = dao.getCourseByID(courseID);
         Map<Integer, List<String>> courseExpert = dao.expertCourse();
         Map<Integer, List<String>> courseCate = dao.courseCategory();
+        List<Category> cateList = dao.getCategories();
         request.setAttribute("courseExpert", courseExpert);
-        request.setAttribute("courseList", courseList); 
-        request.setAttribute("userList", userList); 
-        request.setAttribute("expertList", expertList);     
-        request.setAttribute("expertCategories", expertCategories);
-         request.setAttribute("courseCate", courseCate);
+        request.setAttribute("courseCate", courseCate);
+        request.setAttribute("courseUpdate", course);
+         request.setAttribute("cateList", cateList);
         
-        
-        request.getRequestDispatcher("Admin.jsp").forward(request, response);
+          HttpSession session = request.getSession();
+        String message = (String) session.getAttribute("message");
+        if (message != null) {
+            request.setAttribute("message", message);
+            session.removeAttribute("message");
+        }
+
+       
+        request.getRequestDispatcher("CourseManage.jsp").forward(request, response);
     } 
 
     /** 
@@ -91,7 +93,28 @@ public class adminControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-       processRequest(request, response);
+        int courseID = Integer.parseInt(request.getParameter("courseId"));
+        dao dao = new dao();
+        Course course = dao.getCourseByID(courseID);
+        Map<Integer, List<String>> courseExpert = dao.expertCourse();
+        Map<Integer, List<String>> courseCate = dao.courseCategory();
+        request.setAttribute("courseExpert", courseExpert);
+        request.setAttribute("courseCate", courseCate);
+        request.setAttribute("courseUpdate", course);
+        
+         List<Category> cateList = dao.getCategories();
+           request.setAttribute("cateList", cateList);
+          HttpSession session = request.getSession();
+        String message = (String) session.getAttribute("message");
+        if (message != null) {
+            request.setAttribute("message", message);
+            session.removeAttribute("message");
+        }
+
+       
+        request.getRequestDispatcher("CourseManage.jsp").forward(request, response);
+        
+        
     }
 
     /** 

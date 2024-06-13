@@ -74,9 +74,15 @@ public class updateExpert extends HttpServlet {
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String specialty = request.getParameter("specialty");
+        String addSpecialty = request.getParameter("addSpecialty");
+
 
         dao expertDAO = new dao();
         expertDAO.updateExpert(username, email, specialty, expertId);
+          if (addSpecialty != null && !addSpecialty.isEmpty()) {
+                int categoryId = expertDAO.getCategoryByName(addSpecialty);
+             expertDAO.addCategorForExpert(expertId, categoryId);
+        }
 
         HttpSession session = request.getSession();
         session.setAttribute("message", "Update successfully");
