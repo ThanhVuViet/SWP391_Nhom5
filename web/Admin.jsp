@@ -233,7 +233,7 @@
                                 </table>
                             </div>
                         </div>
-                        <a href="customer_manage.html" class="btn btn-secondary">See More</a>
+                        <a href="CustomerList" class="btn btn-secondary">See More</a>
                     </div>
                     <div id="expertAccountManage" class="mt-5">
                         <h2>Expert Account Manage</h2>

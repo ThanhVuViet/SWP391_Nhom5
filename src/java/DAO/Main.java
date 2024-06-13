@@ -6,6 +6,7 @@ package DAO;
 
 import Entity.Course;
 import Entity.Expert;
+import Entity.Users;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +47,10 @@ public class Main {
          List<Course> courses = dao.getCoursesByCate("p");
          for (Course course : courses) {
              System.err.println(course);
+         }
+         List<Users> userses = dao.getUsersByName("thanh");
+         for (Users user: userses) {
+             System.err.println(user);
          }
     }
 }

@@ -62,6 +62,159 @@ public class dao extends MyDAO {
 
         return null;
     }
+    public List<Users> getUsers() {
+        String query = "SELECT * FROM Users ";
+        List<Users> userList = new ArrayList<>();
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) { // Use while instead of if
+                
+                int userId = rs.getInt("user_id");
+               
+                int roleId = rs.getInt("role_id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                Date birthDate = rs.getDate("birth_date");
+                String image = rs.getString("image");
+                String phoneNumber = rs.getString("phone_number");
+                String address = rs.getString("address");
+                Date createdAt = rs.getDate("created_at");
+                boolean banned = rs.getBoolean("banned");
+                int failedAttempt = rs.getInt("failedAttempt");
+                long lockTime = rs.getLong("lockTime");
+
+                Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
+                
+                userList.add(user);
+            }
+        } catch (Exception s) {
+            s.printStackTrace(); // Handle exceptions appropriately in your application
+        }
+
+        return userList;
+
+       
+    }
+     public List<Users> getUsersByName(String usernameFilter) {
+        String query = "SELECT * FROM Users u where u.username like ? ";
+        List<Users> userList = new ArrayList<>();
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, "%" + usernameFilter + "%");
+            rs = ps.executeQuery();
+
+            while (rs.next()) { // Use while instead of if
+                
+                int userId = rs.getInt("user_id");
+               
+                int roleId = rs.getInt("role_id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                Date birthDate = rs.getDate("birth_date");
+                String image = rs.getString("image");
+                String phoneNumber = rs.getString("phone_number");
+                String address = rs.getString("address");
+                Date createdAt = rs.getDate("created_at");
+                boolean banned = rs.getBoolean("banned");
+                int failedAttempt = rs.getInt("failedAttempt");
+                long lockTime = rs.getLong("lockTime");
+
+                Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
+                
+                userList.add(user);
+            }
+        } catch (Exception s) {
+            s.printStackTrace(); // Handle exceptions appropriately in your application
+        }
+
+        return userList;
+
+       
+    }
+      public List<Users> getUsersByEmail(String emailFilter) {
+        String query = "SELECT * FROM Users u where u.email like ? ";
+        List<Users> userList = new ArrayList<>();
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, "%" + emailFilter + "%");
+            rs = ps.executeQuery();
+
+            while (rs.next()) { // Use while instead of if
+                
+                int userId = rs.getInt("user_id");
+               
+                int roleId = rs.getInt("role_id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                Date birthDate = rs.getDate("birth_date");
+                String image = rs.getString("image");
+                String phoneNumber = rs.getString("phone_number");
+                String address = rs.getString("address");
+                Date createdAt = rs.getDate("created_at");
+                boolean banned = rs.getBoolean("banned");
+                int failedAttempt = rs.getInt("failedAttempt");
+                long lockTime = rs.getLong("lockTime");
+
+                Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
+                
+                userList.add(user);
+            }
+        } catch (Exception s) {
+            s.printStackTrace(); // Handle exceptions appropriately in your application
+        }
+
+        return userList;
+
+       
+    }
+      public List<Users> getUsersByEmailAndName(String emailFilter, String userNameFilter) {
+        String query = "SELECT * FROM Users u where u.email like ? and u.username like ?";
+        List<Users> userList = new ArrayList<>();
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, "%" + emailFilter + "%");
+            ps.setString(1, "%" + userNameFilter + "%");
+            rs = ps.executeQuery();
+
+            while (rs.next()) { // Use while instead of if
+                
+                int userId = rs.getInt("user_id");
+               
+                int roleId = rs.getInt("role_id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                Date birthDate = rs.getDate("birth_date");
+                String image = rs.getString("image");
+                String phoneNumber = rs.getString("phone_number");
+                String address = rs.getString("address");
+                Date createdAt = rs.getDate("created_at");
+                boolean banned = rs.getBoolean("banned");
+                int failedAttempt = rs.getInt("failedAttempt");
+                long lockTime = rs.getLong("lockTime");
+
+                Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
+                
+                userList.add(user);
+            }
+        } catch (Exception s) {
+            s.printStackTrace(); // Handle exceptions appropriately in your application
+        }
+
+        return userList;
+
+       
+    }
+      
 
     public Users existEmail(String email) {
         String query = "SELECT * FROM Users where email=?";
@@ -735,41 +888,7 @@ public class dao extends MyDAO {
         return categorylist;
     }
 
-    public List<Users> getUsers() {
-        String query = "SELECT * FROM Users";
-        List<Users> e = new ArrayList<>();
-        try {
-            ps = con.prepareStatement(query);
-            rs = ps.executeQuery();
-
-            while (rs.next()) { // Use while instead of if
-
-                int userId = rs.getInt("user_id");
-
-                int roleId = rs.getInt("role_id");
-                String username = rs.getString("username");
-                String password = rs.getString("password");
-                String fullName = rs.getString("full_name");
-                String email = rs.getString("email");
-                Date birthDate = rs.getDate("birth_date");
-                String image = rs.getString("image");
-                String phoneNumber = rs.getString("phone_number");
-                String address = rs.getString("address");
-                Date createdAt = rs.getDate("created_at");
-                boolean banned = rs.getBoolean("banned");
-                int failedAttempt = rs.getInt("failedAttempt");
-                long lockTime = rs.getLong("lockTime");
-
-                Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
-
-                e.add(user);
-            }
-        } catch (Exception s) {
-            s.printStackTrace(); // Handle exceptions appropriately in your application
-        }
-
-        return e;
-    }
+    
 
     public List<Course> getCourse() {
         String query = "SELECT * FROM Courses";
