@@ -143,7 +143,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         if (loggedInUser.getRoleId() == 1) {
             response.sendRedirect("admin");
         } else if (loggedInUser.getRoleId() == 2) {
-            response.sendRedirect("home.jsp");
+            response.sendRedirect("");
         } else if (loggedInUser.getRoleId() == 3) {
             response.sendRedirect("expert");
         }
