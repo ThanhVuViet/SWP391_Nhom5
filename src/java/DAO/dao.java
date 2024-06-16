@@ -8,7 +8,7 @@ import Entity.Category;
 import Entity.Course;
 import Entity.Expert;
 import Entity.Users;
-import entity.*;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +62,7 @@ public class dao extends MyDAO {
 
         return null;
     }
+
     public List<Users> getUsers() {
         String query = "SELECT * FROM Users ";
         List<Users> userList = new ArrayList<>();
@@ -70,9 +71,9 @@ public class dao extends MyDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) { // Use while instead of if
-                
+
                 int userId = rs.getInt("user_id");
-               
+
                 int roleId = rs.getInt("role_id");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
@@ -88,7 +89,7 @@ public class dao extends MyDAO {
                 long lockTime = rs.getLong("lockTime");
 
                 Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
-                
+
                 userList.add(user);
             }
         } catch (Exception s) {
@@ -97,20 +98,20 @@ public class dao extends MyDAO {
 
         return userList;
 
-       
     }
-     public List<Users> getUsersByName(String usernameFilter) {
+
+    public List<Users> getUsersByName(String userN) {
         String query = "SELECT * FROM Users u where u.username like ? ";
         List<Users> userList = new ArrayList<>();
         try {
             ps = con.prepareStatement(query);
-            ps.setString(1, "%" + usernameFilter + "%");
+            ps.setString(1, "%"+userN+"%");
             rs = ps.executeQuery();
 
             while (rs.next()) { // Use while instead of if
-                
+
                 int userId = rs.getInt("user_id");
-               
+
                 int roleId = rs.getInt("role_id");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
@@ -126,7 +127,7 @@ public class dao extends MyDAO {
                 long lockTime = rs.getLong("lockTime");
 
                 Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
-                
+
                 userList.add(user);
             }
         } catch (Exception s) {
@@ -135,9 +136,81 @@ public class dao extends MyDAO {
 
         return userList;
 
-       
     }
-      public List<Users> getUsersByEmail(String emailFilter) {
+
+    public List<Users> getTop5User() {
+        String query = "SELECT TOP 5 u.user_id, u.role_id, u.username, u.password, u.full_name, u.email, \n"
+                + "       u.birth_date, u.image, u.phone_number, u.address, u.created_at, \n"
+                + "       u.banned, u.failedAttempt, u.lockTime, SUM(o.total_amount) as totalSpent \n"
+                + "FROM Users u\n"
+                + "JOIN Orders o ON u.user_id = o.user_id\n"
+                + "GROUP BY u.user_id, u.role_id, u.username, u.password, u.full_name, u.email, \n"
+                + "         u.birth_date, u.image, u.phone_number, u.address, u.created_at, \n"
+                + "         u.banned, u.failedAttempt, u.lockTime\n"
+                + "ORDER BY totalSpent DESC; ";
+        List<Users> userList = new ArrayList<>();
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) { // Use while instead of if
+
+                int userId = rs.getInt("user_id");
+
+                int roleId = rs.getInt("role_id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String fullName = rs.getString("full_name");
+                String email = rs.getString("email");
+                Date birthDate = rs.getDate("birth_date");
+                String image = rs.getString("image");
+                String phoneNumber = rs.getString("phone_number");
+                String address = rs.getString("address");
+                Date createdAt = rs.getDate("created_at");
+                boolean banned = rs.getBoolean("banned");
+                int failedAttempt = rs.getInt("failedAttempt");
+                long lockTime = rs.getLong("lockTime");
+
+                Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
+
+                userList.add(user);
+            }
+        } catch (Exception s) {
+            s.printStackTrace(); // Handle exceptions appropriately in your application
+        }
+
+        return userList;
+
+    }
+
+    public Map<Integer, Double> getTotalSpent() {
+        String query = "SELECT TOP 5 u.user_id, u.username, u.email, SUM(o.total_amount) as totalSpent \n"
+                + "FROM Users u\n"
+                + "JOIN Orders o ON u.user_id = o.user_id\n"
+                + "GROUP BY u.user_id, u.username, u.email\n"
+                + "ORDER BY totalSpent DESC; ";
+        Map<Integer, Double> totalMap = new HashMap<>();
+        try {
+            ps = con.prepareStatement(query);
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) { // Use while instead of if
+
+                int userId = rs.getInt("user_id");
+
+                double totalSpent = rs.getDouble("totalSpent");
+                totalMap.put(userId, totalSpent);
+            }
+        } catch (Exception s) {
+            s.printStackTrace(); // Handle exceptions appropriately in your application
+        }
+
+        return totalMap;
+
+    }
+
+    public List<Users> getUsersByEmail(String emailFilter) {
         String query = "SELECT * FROM Users u where u.email like ? ";
         List<Users> userList = new ArrayList<>();
         try {
@@ -146,9 +219,9 @@ public class dao extends MyDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) { // Use while instead of if
-                
+
                 int userId = rs.getInt("user_id");
-               
+
                 int roleId = rs.getInt("role_id");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
@@ -164,7 +237,7 @@ public class dao extends MyDAO {
                 long lockTime = rs.getLong("lockTime");
 
                 Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
-                
+
                 userList.add(user);
             }
         } catch (Exception s) {
@@ -173,9 +246,9 @@ public class dao extends MyDAO {
 
         return userList;
 
-       
     }
-      public List<Users> getUsersByEmailAndName(String emailFilter, String userNameFilter) {
+
+    public List<Users> getUsersByEmailAndName(String emailFilter, String userNameFilter) {
         String query = "SELECT * FROM Users u where u.email like ? and u.username like ?";
         List<Users> userList = new ArrayList<>();
         try {
@@ -185,9 +258,9 @@ public class dao extends MyDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) { // Use while instead of if
-                
+
                 int userId = rs.getInt("user_id");
-               
+
                 int roleId = rs.getInt("role_id");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
@@ -203,7 +276,7 @@ public class dao extends MyDAO {
                 long lockTime = rs.getLong("lockTime");
 
                 Users user = new Users(userId, roleId, username, password, fullName, email, birthDate, image, phoneNumber, address, createdAt, banned, failedAttempt, lockTime);
-                
+
                 userList.add(user);
             }
         } catch (Exception s) {
@@ -212,9 +285,7 @@ public class dao extends MyDAO {
 
         return userList;
 
-       
     }
-      
 
     public Users existEmail(String email) {
         String query = "SELECT * FROM Users where email=?";
@@ -612,12 +683,34 @@ public class dao extends MyDAO {
     }
 
     public List<Expert> getExpertByName(String userName) {
-        String query = """
-                       select distinct u.username, c.expert_id, u.email, ca.name from Experts c
-                       join ExpertCategories e on c.expert_id = e.expert_id
-                       join Categories ca on e.category_id = ca.category_id
-                       join Users u on u.user_id = c.user_id
-                       where u.username like ? """;
+        String query = "SELECT *\n"
+                + "FROM (\n"
+                + "    SELECT \n"
+                + "       c.expert_id, \n"
+                + "       u.user_id, \n"
+                + "       c.description, \n"
+                + "       c.certification, \n"
+                + "       u.role_id,\n"
+                + "       u.username,\n"
+                + "       u.password,\n"
+                + "       u.full_name,\n"
+                + "       u.email,\n"
+                + "       u.birth_date,\n"
+                + "       u.image,\n"
+                + "       u.phone_number,\n"
+                + "       u.address,\n"
+                + "       u.created_at,\n"
+                + "       u.banned,\n"
+                + "       u.failedAttempt,\n"
+                + "	   u.lockTime,\n"
+                + "       ROW_NUMBER() OVER (PARTITION BY u.username ORDER BY c.expert_id) AS row_num\n"
+                + "    FROM Experts c\n"
+                + "    JOIN ExpertCategories e ON c.expert_id = e.expert_id\n"
+                + "    JOIN Categories ca ON e.category_id = ca.category_id\n"
+                + "    JOIN Users u ON u.user_id = c.user_id\n"
+                + "    WHERE u.username LIKE  ?\n"
+                + ") AS subquery\n"
+                + "WHERE row_num = 1;";
         List<Expert> e = new ArrayList<>();
         try {
             ps = con.prepareStatement(query);
@@ -654,11 +747,34 @@ public class dao extends MyDAO {
     }
 
     public List<Expert> getExpertByCate(String cate) {
-        String query = "SELECT * FROM Experts c "
-                + "JOIN ExpertCategories e ON c.expert_id = e.expert_id "
-                + "JOIN Categories ca ON e.category_id = ca.category_id "
-                + "JOIN Users u ON u.user_id = c.user_id "
-                + "WHERE ca.name LIKE ?";
+        String query = "SELECT *\n"
+                + "FROM (\n"
+                + "    SELECT \n"
+                + "       c.expert_id, \n"
+                + "       u.user_id, \n"
+                + "       c.description, \n"
+                + "       c.certification, \n"
+                + "       u.role_id,\n"
+                + "       u.username,\n"
+                + "       u.password,\n"
+                + "       u.full_name,\n"
+                + "       u.email,\n"
+                + "       u.birth_date,\n"
+                + "       u.image,\n"
+                + "       u.phone_number,\n"
+                + "       u.address,\n"
+                + "       u.created_at,\n"
+                + "       u.banned,\n"
+                + "       u.failedAttempt,\n"
+                + "	   u.lockTime,\n"
+                + "       ROW_NUMBER() OVER (PARTITION BY u.username ORDER BY c.expert_id) AS row_num\n"
+                + "    FROM Experts c\n"
+                + "    JOIN ExpertCategories e ON c.expert_id = e.expert_id\n"
+                + "    JOIN Categories ca ON e.category_id = ca.category_id\n"
+                + "    JOIN Users u ON u.user_id = c.user_id\n"
+                + "    WHERE ca.name LIKE  ?\n"
+                + ") AS subquery\n"
+                + "WHERE row_num = 1;";
         List<Expert> e = new ArrayList<>();
         try {
             ps = con.prepareStatement(query);
@@ -695,11 +811,9 @@ public class dao extends MyDAO {
     }
 
     public List<Expert> getExpertByCateName(String userName, String cate) {
-        String query = "SELECT * FROM Experts c "
-                + "JOIN ExpertCategories e ON c.expert_id = e.expert_id "
-                + "JOIN Categories ca ON e.category_id = ca.category_id "
-                + "JOIN Users u ON u.user_id = c.user_id "
-                + "WHERE u.username LIKE ? AND ca.name LIKE ?";
+        String query = "select * from Experts e\n"
+                + "join Users u on e.user_id = u.user_id\n"
+                + "where u.username like ?";
         List<Expert> e = new ArrayList<>();
         try {
             ps = con.prepareStatement(query);
@@ -848,6 +962,7 @@ public class dao extends MyDAO {
             e.printStackTrace();
         }
     }
+
     public void updateCourse(String courseName, String description, int courseId) {
         String queryUser = "update Courses set description = ?, Title = ? where course_id =?;";
         try {
@@ -856,8 +971,6 @@ public class dao extends MyDAO {
             ps.setString(2, description);
             ps.setInt(3, courseId);
             ps.executeUpdate();
-
-           
 
         } catch (Exception e) {
 
@@ -887,8 +1000,6 @@ public class dao extends MyDAO {
 
         return categorylist;
     }
-
-    
 
     public List<Course> getCourse() {
         String query = "SELECT * FROM Courses";
@@ -936,7 +1047,6 @@ public class dao extends MyDAO {
                 Date createdAt = rs.getDate("created_at");
                 Date updatedAt = rs.getDate("updated_at");
                 course = new Course(courseID, title, categoryId, description, price, createdAt, updatedAt);
-               
 
             }
         } catch (Exception s) {
@@ -968,34 +1078,47 @@ public class dao extends MyDAO {
         }
         return courseCate;
     }
+
     public void addCategorForExpert(int expertId, int categoryId) {
-        String query ="Insert into ExpertCategories Values (?, ?)";
+        String query = "Insert into ExpertCategories Values (?, ?)";
         try {
             ps = con.prepareStatement(query);
-               ps.setInt(1, expertId);
+            ps.setInt(1, expertId);
             ps.setInt(2, categoryId);
-             ps.executeUpdate();
+            ps.executeUpdate();
             rs = ps.executeQuery();
-            
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    public void deleteCategoryForExpert(int expertId, int categoryId) {
+    String query = "DELETE FROM ExpertCategories WHERE expert_id = ? AND category_id = ?";
+    try {
+        ps = con.prepareStatement(query);
+        ps.setInt(1, expertId);
+        ps.setInt(2, categoryId);
+        ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
     public void addCategorForCourse(int categoryId, int courseId) {
-        String query ="update Courses set category_id = ? where course_id = ?";
+        String query = "update Courses set category_id = ? where course_id = ?";
         try {
             ps = con.prepareStatement(query);
-               ps.setInt(1, categoryId);
+            ps.setInt(1, categoryId);
             ps.setInt(2, courseId);
-             ps.executeUpdate();
-            
-            
-            
+            ps.executeUpdate();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
+    
+
     public int getCategoryByName(String courseId) {
         String query = "select * from Categories where Categories.name =?";
         Course course = null;
@@ -1008,8 +1131,6 @@ public class dao extends MyDAO {
             while (rs.next()) { // Use while instead of if
 
                 categoryID = rs.getInt("category_id");
-                
-               
 
             }
         } catch (Exception s) {

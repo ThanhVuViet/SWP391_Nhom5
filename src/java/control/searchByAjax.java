@@ -37,31 +37,41 @@ public class searchByAjax extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            for (Expert expert : expertList) {
-                Users user = expert.getUser();
-                out.println("<tr>");
-                out.println("<td>" + expert.getExpertId() + "</td>");
-                out.println("<td>" + user.getUsername() + "</td>");
-                out.println("<td>" + user.getEmail() + "</td>");
-                out.println("<td>");
-                List<String> categories = expertCategories.get(expert.getExpertId());
-                if (categories != null) {
-                    if (categories.size() == 1) {
-                        out.print(categories.get(0));
-                    } else {
-                        for (int i = 0; i < categories.size(); i++) {
-                            out.print(categories.get(i));
-                            if (i < categories.size() - 1) {
-                                out.print(", ");
-                            }
-                        }
+    for (Expert expert : expertList) {
+        Users user = expert.getUser();
+        out.println("<tr>");
+        out.println("<td>" + expert.getExpertId() + "</td>");
+        out.println("<td>" + user.getUsername() + "</td>");
+        out.println("<td>" + user.getEmail() + "</td>");
+        out.println("<td>");
+        List<String> categories = expertCategories.get(expert.getExpertId());
+        if (categories != null) {
+            if (categories.size() == 1) {
+                out.print(categories.get(0));
+            } else {
+                for (int i = 0; i < categories.size(); i++) {
+                    out.print(categories.get(i));
+                    if (i < categories.size() - 1) {
+                        out.print(", ");
                     }
                 }
-                out.println("</td>");
-                out.println("<td><button class=\"btn btn-primary btn-sm\">Edit</button> <button class=\"btn btn-danger btn-sm\">Delete</button></td>");
-                out.println("</tr>");
             }
         }
+        out.println("</td>");
+        out.println("<td>");
+        out.println("<form action=\"editExpertServlet\" method=\"post\" style=\"display:inline;\">");
+        out.println("<input type=\"hidden\" name=\"expertId\" value=\"" + expert.getExpertId() + "\">");
+        out.println("<button type=\"submit\" class=\"btn btn-primary btn-sm\">Edit</button>");
+        out.println("</form>");
+        out.println("<form action=\"deleteExpertServlet\" method=\"POST\" style=\"display:inline;\">");
+        out.println("<input type=\"hidden\" name=\"expertId\" value=\"" + expert.getExpertId() + "\">");
+        out.println("<button type=\"submit\" class=\"btn btn-danger btn-sm\">Delete</button>");
+        out.println("</form>");
+        out.println("</td>");
+        out.println("</tr>");
+    }
+}
+
     }
 
     @Override

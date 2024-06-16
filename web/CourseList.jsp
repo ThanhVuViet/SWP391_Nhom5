@@ -61,17 +61,17 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#manageCourse" class="nav-link px-0 align-middle">
+                                <a href="CourseList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline">Manage Course</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#customerManage" class="nav-link px-0 align-middle">
+                                <a href="CustomerList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customer Manage</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#expertAccountManage" class="nav-link px-0 align-middle">
+                                <a href="ExpertList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Expert Account Manage</span>
                                 </a>
                             </li>
@@ -83,6 +83,16 @@
                             <li>
                                 <a href="#settings" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="DoanhThuThang.jsp" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-calendar"></i> <span class="ms-1 d-none d-sm-inline">Monthly Revenue</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="Top5User" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Top 5 Customers</span>
                                 </a>
                             </li>
                         </ul>
@@ -135,6 +145,7 @@
                                             <th>ID</th>
 
                                             <th>Name</th>
+                                            <th>Expert</th>
                                             <th>Specialty</th>
                                             <th>Actions</th>
                                         </tr>
@@ -185,12 +196,12 @@
                                                 <a href="editCourse?courseId=<%= course.getCourseId() %>" class="btn btn-primary btn-sm">Edit</a>
                                                 <button class="btn btn-danger btn-sm">Delete</button>
                                             </td>
-                                  
-                                    </tr>
-                                    <%
+
+                                        </tr>
+                                        <%
                                                 
-                                        }
-                                    %>
+                                            }
+                                        %>
                                     </tbody>
                                 </table>
                             </div>

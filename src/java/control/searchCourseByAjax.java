@@ -56,24 +56,30 @@ public class searchCourseByAjax extends HttpServlet {
 
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-        out.println("<table>");
-        for (Course course : CourseList) {
-            // Get experts and categories for the course
-            List<String> experts = courseExpert.get(course.getCourseId());
-            List<String> categories = courseCate.get(course.getCourseId());
-            String expertsStr = experts != null ? String.join(", ", experts) : "";
-            String categoriesStr = categories != null ? String.join(", ", categories) : "";
+    out.println("<table>");
+    for (Course course : CourseList) {
+        // Get experts and categories for the course
+        List<String> experts = courseExpert.get(course.getCourseId());
+        List<String> categories = courseCate.get(course.getCourseId());
+        String expertsStr = experts != null ? String.join(", ", experts) : "";
+        String categoriesStr = categories != null ? String.join(", ", categories) : "";
 
-            out.print("<tr>\n"
-                    + "    <td>" + course.getCourseId() + "</td>\n"
-                    + "    <td>" + course.getTitle() + "</td>\n"
-                    + "    <td>" + expertsStr + "</td>\n"
-                    + "    <td>" + categoriesStr + "</td>\n"
-                    + "    <td><button class=\"btn btn-primary btn-sm\">Edit</button> <button class=\"btn btn-danger btn-sm\">Delete</button></td>\n"
-                    + "</tr>");
-        }
-        out.println("</table>");
+        out.print("<tr>\n"
+                + "    <td>" + course.getCourseId() + "</td>\n"
+                + "    <td>" + course.getTitle() + "</td>\n"
+                + "    <td>" + expertsStr + "</td>\n"
+                + "    <td>" + categoriesStr + "</td>\n"
+                + "    <td>\n"
+                + "        <a href=\"editCourse?courseId=" + course.getCourseId() + "\" class=\"btn btn-primary btn-sm\">Edit</a>\n"
+                        + "        <a href=\"delete?courseId=" + course.getCourseId() + "\" class=\"btn btn-danger btn-sm\">Delete</a>\n"
+                        
+                
+                + "    </td>\n"
+                + "</tr>");
     }
+    out.println("</table>");
+}
+
 }
 
 

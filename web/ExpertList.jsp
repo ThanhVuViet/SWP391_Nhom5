@@ -52,38 +52,48 @@
                     <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                         <span class="fs-5 d-none d-sm-inline">Menu</span>
                     </a>
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link align-middle px-0">
-                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#manageCourse" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline">Manage Course</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#customerManage" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customer Manage</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#expertAccountManage" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Expert Account Manage</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#viewReports" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-file-earmark-text"></i> <span class="ms-1 d-none d-sm-inline">View Reports</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#settings" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span>
-                            </a>
-                        </li>
-                    </ul>
+                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link align-middle px-0">
+                                    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="CourseList" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline">Manage Course</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="CustomerList" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customer Manage</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="ExpertList" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Expert Account Manage</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#viewReports" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-file-earmark-text"></i> <span class="ms-1 d-none d-sm-inline">View Reports</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#settings" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="DoanhThuThang.jsp" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-calendar"></i> <span class="ms-1 d-none d-sm-inline">Monthly Revenue</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="Top5User" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Top 5 Customers</span>
+                                </a>
+                            </li>
+                        </ul>
                     <hr>
                     <div class="dropdown pb-4">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">

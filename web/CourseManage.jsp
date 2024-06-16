@@ -31,17 +31,17 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#manageCourse" class="nav-link px-0 align-middle">
+                                <a href="CourseList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline">Manage Course</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#customerManage" class="nav-link px-0 align-middle">
+                                <a href="CustomerList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customer Manage</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#expertAccountManage" class="nav-link px-0 align-middle">
+                                <a href="ExpertList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Expert Account Manage</span>
                                 </a>
                             </li>
@@ -53,6 +53,16 @@
                             <li>
                                 <a href="#settings" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="DoanhThuThang.jsp" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-calendar"></i> <span class="ms-1 d-none d-sm-inline">Monthly Revenue</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="Top5User" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Top 5 Customers</span>
                                 </a>
                             </li>
                         </ul>
@@ -137,6 +147,7 @@
                             <div class="form-group">
                                 <label for="addSpecialty">Add Specialty</label>
                                 <select class="form-control" id="addSpecialty" name="addSpecialty">
+                                    <option value="" disabled selected>Select a category</option>
                                     <% if (cateList != null) { 
                                         for (Category category : cateList) {
                                             if (!categories.contains(category.getCateName())) { %>
@@ -146,6 +157,7 @@
                                     } %>
                                 </select>
                             </div>
+                           
                             <input type="hidden" name="courseId" value="<%=course.getCourseId() %>">
                             <button type="submit" class="btn btn-primary">Save</button>
                             <a href="viewCourseDetails?courseId=<%= course.getCourseId() %>" class="btn btn-secondary">View Course</a>

@@ -35,17 +35,17 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#manageCourse" class="nav-link px-0 align-middle">
+                                <a href="CourseList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline">Manage Course</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#customerManage" class="nav-link px-0 align-middle">
+                                <a href="CustomerList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customer Manage</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#expertAccountManage" class="nav-link px-0 align-middle">
+                                <a href="ExpertList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Expert Account Manage</span>
                                 </a>
                             </li>
@@ -57,6 +57,16 @@
                             <li>
                                 <a href="#settings" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="DoanhThuThang.jsp" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-calendar"></i> <span class="ms-1 d-none d-sm-inline">Monthly Revenue</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="Top5User" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Top 5 Customers</span>
                                 </a>
                             </li>
                         </ul>
@@ -119,20 +129,33 @@
                             </div>
                             <div class="form-group">
                                 <label for="specialty">Specialty</label>
-                                <input type="text" class="form-control" id="specialty" name="specialty" value="<%= categoriesStr %>">
+                                <input type="text" class="form-control" id="specialty" name="specialty" value="<%= categoriesStr %>" readonly>
                             </div>
-                              <div class="form-group">
-                            <label for="addSpecialty">Add Specialty</label>
-                            <select class="form-control" id="addSpecialty" name="addSpecialty">
-                                <% if (cateList != null) { 
-                                    for (Category category : cateList) {
-                                        if (!categories.contains(category.getCateName())) { %>
-                                            <option value="<%= category.getCateName() %>"><%= category.getCateName() %></option>
-                                <%      } 
-                                    } 
-                                } %>
-                            </select>
-                        </div>
+                            <div class="form-group">
+                                <label for="addSpecialty">Add Specialty</label>
+                                <select class="form-control" id="addSpecialty" name="addSpecialty">
+                                    <option value="" disabled selected>Select a category</option>
+                                    <% if (cateList != null) { 
+                                        for (Category category : cateList) {
+                                            if (!categories.contains(category.getCateName())) { %>
+                                    <option value="<%= category.getCateName() %>"><%= category.getCateName() %></option>
+                                    <%      } 
+                                        } 
+                                    } %>
+                                </select>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="deleteSpecialty">Delete Specialty</label>
+                                <select class="form-control" id="deleteSpecialty" name="deleteSpecialty">
+                                    <option value="" disabled selected>Select a category</option>
+                                    <% if (categories != null) { 
+                for (String category : categories) { %>
+                                    <option value="<%= category %>"><%= category %></option>
+                                    <% } 
+            } %>
+                                </select>
+                            </div>
                             <input type="hidden" name="expertId" value="<%= expert.getExpertId() %>">
                             <button type="submit" class="btn btn-primary">Save</button>
                         </form>
@@ -149,17 +172,17 @@
                             <tbody>
                                 <% if (courses != null) { 
                                     for (Course course : courses) { %>
-                                    <tr>
-                                        <td><%= course.getCourseId() %></td>
-                                        <td><%= course.getTitle() %></td>
-                                        <td><%= course.getDescription() %></td>
-                                        <td><a href="viewCourseDetails?courseId=<%= course.getCourseId() %>" class="btn btn-info btn-sm">View Course</a></td>
-                                    </tr>
+                                <tr>
+                                    <td><%= course.getCourseId() %></td>
+                                    <td><%= course.getTitle() %></td>
+                                    <td><%= course.getDescription() %></td>
+                                    <td><a href="viewCourseDetails?courseId=<%= course.getCourseId() %>" class="btn btn-info btn-sm">View Course</a></td>
+                                </tr>
                                 <% } 
                                 } else { %>
-                                    <tr>
-                                        <td colspan="4">No courses found for this expert.</td>
-                                    </tr>
+                                <tr>
+                                    <td colspan="4">No courses found for this expert.</td>
+                                </tr>
                                 <% } %>
                             </tbody>
                         </table>

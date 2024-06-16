@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
     <%@ page import="java.util.ArrayList" %>
@@ -73,17 +72,17 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#manageCourse" class="nav-link px-0 align-middle">
+                                <a href="CourseList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline">Manage Course</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#customerManage" class="nav-link px-0 align-middle">
+                                <a href="CustomerList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customer Manage</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#expertAccountManage" class="nav-link px-0 align-middle">
+                                <a href="ExpertList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Expert Account Manage</span>
                                 </a>
                             </li>
@@ -95,6 +94,16 @@
                             <li>
                                 <a href="#settings" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="DoanhThuThang.jsp" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-calendar"></i> <span class="ms-1 d-none d-sm-inline">Monthly Revenue</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="Top5User" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Top 5 Customers</span>
                                 </a>
                             </li>
                         </ul>
@@ -136,56 +145,54 @@
                                     </thead>
                                     <tbody>
                                         <%
-                                            
-                                              Map<Integer, List<String>> courseCate = (Map<Integer, List<String>>) request.getAttribute("courseCate");
-    Map<Integer, List<String>> expertCourse = (Map<Integer, List<String>>) request.getAttribute("courseExpert");
-    int countCourse = 0;
-    ArrayList<Course> courseList = (ArrayList<Course>) request.getAttribute("courseList");
+                                            Map<Integer, List<String>> courseCate = (Map<Integer, List<String>>) request.getAttribute("courseCate");
+                                            Map<Integer, List<String>> expertCourse = (Map<Integer, List<String>>) request.getAttribute("courseExpert");
+                                            int countCourse = 0;
+                                            ArrayList<Course> courseList = (ArrayList<Course>) request.getAttribute("courseList");
 
-    for (Course course : courseList) {
-        if (countCourse >= 2) {
-            break;
-        }
+                                            for (Course course : courseList) {
+                                                if (countCourse >= 2) {
+                                                    break;
+                                                }
 
-        List<String> experts = expertCourse.get(course.getCourseId());
-        if (experts == null) {
-            experts = new ArrayList<>();
-        }
-        StringBuilder expertsStrBuilder = new StringBuilder();
-        for (int i = 0; i < experts.size(); i++) {
-            expertsStrBuilder.append(experts.get(i));
-            if (i < experts.size() - 1) {
-                expertsStrBuilder.append(", ");
-            }
-        }
-        String expertsStr = expertsStrBuilder.toString();
+                                                List<String> experts = expertCourse.get(course.getCourseId());
+                                                if (experts == null) {
+                                                    experts = new ArrayList<>();
+                                                }
+                                                StringBuilder expertsStrBuilder = new StringBuilder();
+                                                for (int i = 0; i < experts.size(); i++) {
+                                                    expertsStrBuilder.append(experts.get(i));
+                                                    if (i < experts.size() - 1) {
+                                                        expertsStrBuilder.append(", ");
+                                                    }
+                                                }
+                                                String expertsStr = expertsStrBuilder.toString();
 
-        List<String> categories = courseCate.get(course.getCourseId());
-        StringBuilder categoriesStrBuilder = new StringBuilder();
-        if (categories != null) {
-            for (int i = 0; i < categories.size(); i++) {
-                categoriesStrBuilder.append(categories.get(i));
-                if (i < categories.size() - 1) {
-                    categoriesStrBuilder.append(", ");
-                }
-            }
-        }
-        String categoriesStr = categoriesStrBuilder.toString();
-                                                
+                                                List<String> categories = courseCate.get(course.getCourseId());
+                                                StringBuilder categoriesStrBuilder = new StringBuilder();
+                                                if (categories != null) {
+                                                    for (int i = 0; i < categories.size(); i++) {
+                                                        categoriesStrBuilder.append(categories.get(i));
+                                                        if (i < categories.size() - 1) {
+                                                            categoriesStrBuilder.append(", ");
+                                                        }
+                                                    }
+                                                }
+                                                String categoriesStr = categoriesStrBuilder.toString();
                                         %>
                                         <tr>
                                             <td><%= course.getCourseId() %></td>
                                             <td><%= course.getTitle() %></td>
                                             <td><%= expertsStr %></td>
                                             <td><%= categoriesStr %></td>
-                                            <td><button class="btn btn-primary btn-sm">Edit</button> <button class="btn btn-danger btn-sm">Delete</button></td>
+                                            <td> <a href="editCourse?courseId=<%= course.getCourseId() %>" class="btn btn-primary btn-sm">Edit</a>
+                                                <button class="btn btn-danger btn-sm">Delete</button></td>
                                         </tr>
                                         <%
                                                 countCourse++;
                                             }
                                         %>
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>
@@ -209,25 +216,23 @@
                                     </thead>
                                     <tbody>
                                         <%
-                                            int countUser =0;
-                                        ArrayList<Users> userList = (ArrayList<Users>) request.getAttribute("userList");
-                                        for (Users user : userList) {
-                                        if (countUser >=2) {
-                                               break;
-                                            }
+                                            int countUser = 0;
+                                            ArrayList<Users> userList = (ArrayList<Users>) request.getAttribute("userList");
+                                            for (Users user : userList) {
+                                                if (countUser >= 2) {
+                                                    break;
+                                                }
                                         %>
                                         <tr>
-                                            <td> <%= user.getUserId() %></td>
-                                            <td><%= user.getUsername()%></td>
-                                            <td><%= user.getEmail()%></td>
-                                            <td><%= user.getPhoneNumber()%></td>
+                                            <td><%= user.getUserId() %></td>
+                                            <td><%= user.getUsername() %></td>
+                                            <td><%= user.getEmail() %></td>
+                                            <td><%= user.getPhoneNumber() %></td>
                                             <td><button class="btn btn-primary btn-sm">View</button> <button class="btn btn-danger btn-sm">Delete</button></td>
                                         </tr>
-                                        <!-- More rows as needed -->
                                         <% 
-                                            countUser++;
+                                                countUser++;
                                             }
-                                        
                                         %>
                                     </tbody>
                                 </table>
@@ -238,11 +243,9 @@
                     <div id="expertAccountManage" class="mt-5">
                         <h2>Expert Account Manage</h2>
                         <p>Manage expert accounts here.</p>
-
                         <div class="card mb-3">
                             <div class="card-header">Expert Accounts</div>
                             <div class="card-body">
-
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -250,27 +253,25 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Specialty</th>
-
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
-
                                     <tbody id="expertResults">
                                         <% 
-                                            int count =0;
+                                            int count = 0;
                                             ArrayList<Expert> expertList = (ArrayList<Expert>) request.getAttribute("expertList");
                                             Map<Integer, List<String>> expertCategories = (Map<Integer, List<String>>) request.getAttribute("expertCategories");
-                                           
+
                                             for (Expert expert : expertList) {
-                                                 if (count >= 2) { 
-                break; 
-            }
+                                                if (count >= 2) { 
+                                                    break; 
+                                                }
                                                 Users user = expert.getUser();
                                         %>
                                         <tr>
-                                            <td><%=expert.getExpertId()%></td>
-                                            <td><%=user.getUsername()%></td>
-                                            <td><%=user.getEmail()%></td>
+                                            <td><%= expert.getExpertId() %></td>
+                                            <td><%= user.getUsername() %></td>
+                                            <td><%= user.getEmail() %></td>
                                             <td>
                                                 <%
                                                     List<String> categories = expertCategories.get(expert.getExpertId());
@@ -290,22 +291,20 @@
                                             </td>
                                             <td>
                                                 <form action="editExpertServlet" method="post" style="display:inline;">
-                                                    <input type="hidden" name="expertId" value="<%=expert.getExpertId()%>">
+                                                    <input type="hidden" name="expertId" value="<%= expert.getExpertId() %>">
                                                     <button type="submit" class="btn btn-primary btn-sm">Edit</button>
                                                 </form>
                                                 <form action="deleteExpertServlet" method="POST" style="display:inline;">
-                                                    <input type="hidden" name="expertId" value="<%=expert.getExpertId()%>">
+                                                    <input type="hidden" name="expertId" value="<%= expert.getExpertId() %>">
                                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
                                         <%
-                                            count++;
-                                            
-                                                            }
+                                                count++;
+                                            }
                                         %>
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>
@@ -459,5 +458,4 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
     </body>
-
 </html>

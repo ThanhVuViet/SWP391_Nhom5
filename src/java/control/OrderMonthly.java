@@ -4,7 +4,7 @@
  */
 package control;
 
-import DAO.dao;
+import DAO.OrderDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,14 +12,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "updateExpert", urlPatterns = {"/updateExpert"})
-public class updateExpert extends HttpServlet {
+@WebServlet(name = "OrderMonthly", urlPatterns = {"/OrderMonthly"})
+public class OrderMonthly extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +39,10 @@ public class updateExpert extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet updateExpert</title>");
+            out.println("<title>Servlet OrderMonthly</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet updateExpert at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet OrderMonthly at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -73,31 +74,12 @@ public class updateExpert extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int expertId = Integer.parseInt(request.getParameter("expertId"));
-        String username = request.getParameter("username");
-        String email = request.getParameter("email");
-        String specialty = request.getParameter("specialty");
-        String addSpecialty = request.getParameter("addSpecialty");
-        String deleteSpecialty = request.getParameter("deleteSpecialty");
+        int year = Integer.parseInt(request.getParameter("selectedYear"));
+        OrderDao dao = new OrderDao();
+        Map<Integer, Double> monthlyRevenue = dao.getMonthlyDouble(year);
+        request.setAttribute("monthlyRevenue", monthlyRevenue);
 
-        dao expertDAO = new dao();
-        expertDAO.updateExpert(username, email, specialty, expertId);
-        if (addSpecialty != null && !addSpecialty.isEmpty()) {
-            int categoryId = expertDAO.getCategoryByName(addSpecialty);
-            expertDAO.addCategorForExpert(expertId, categoryId);
-        }
-        if (deleteSpecialty != null && !deleteSpecialty.isEmpty()) {
-            int categoryId = expertDAO.getCategoryByName(deleteSpecialty);
-            if (categoryId != -1) {
-                expertDAO.deleteCategoryForExpert(expertId, categoryId);
-            }
-        }
-
-        HttpSession session = request.getSession();
-        session.setAttribute("message", "Update successfully");
-
-        // Forward the request to the editExpertServlet with updated information
-        request.getRequestDispatcher("editExpertServlet").forward(request, response);
+        request.getRequestDispatcher("DoanhThuThang.jsp").forward(request, response);
     }
 
     /**

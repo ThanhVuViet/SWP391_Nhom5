@@ -75,6 +75,7 @@ public class updateCourse extends HttpServlet {
         String courseName = request.getParameter("courseName");
        String description = request.getParameter("description");
         String addSpecialty = request.getParameter("addSpecialty");
+        String deleteSpecialty = request.getParameter("deleteSpecialty");
 
         dao courseDAO = new dao();
 
@@ -88,6 +89,8 @@ public class updateCourse extends HttpServlet {
                 courseDAO.addCategorForCourse(categoryId, courseId);
             }
         }
+        
+    
 
         HttpSession session = request.getSession();
         session.setAttribute("message", "Update successfully");
