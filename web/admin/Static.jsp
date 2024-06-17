@@ -82,7 +82,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="CourseList" class="nav-link px-0 align-middle">
+                                <a href="courseList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline">Manage Course</span>
                                 </a>
                             </li>
@@ -92,7 +92,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="ExpertList" class="nav-link px-0 align-middle">
+                                <a href="expertList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Expert Account Manage</span>
                                 </a>
                             </li>
@@ -112,7 +112,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="Top5User" class="nav-link px-0 align-middle">
+                                <a href="top5User" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Top 5 Customers</span>
                                 </a>
                             </li>
@@ -141,7 +141,7 @@
            <main class="col py-3">
     <div class="container-content mt-5">
         <h2>Revenue Statistics</h2>
-        <form method="post" action="OrderFilter">
+        <form method="post" action="orderFilter">
             <div class="mb-3">
                 <label for="startDate" class="form-label">Start Date</label>
                 <input type="date" class="form-control" id="startDate" name="startDate" required

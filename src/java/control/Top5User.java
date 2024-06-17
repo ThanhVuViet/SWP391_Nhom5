@@ -21,7 +21,7 @@ import java.util.Map;
  *
  * @author Admin
  */
-@WebServlet(name="Top5User", urlPatterns={"/Top5User"})
+@WebServlet(name="Top5User", urlPatterns={"admin/top5User"})
 public class Top5User extends HttpServlet {
    
     /** 

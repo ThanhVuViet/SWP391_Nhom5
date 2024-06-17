@@ -21,7 +21,7 @@ import java.util.Map;
  *
  * @author Admin
  */
-@WebServlet(name = "CourseList", urlPatterns = {"/CourseList"})
+@WebServlet(name = "CourseList", urlPatterns = {"admin/courseList"})
 public class CourseList extends HttpServlet {
 
     /**

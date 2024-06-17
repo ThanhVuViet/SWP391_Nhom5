@@ -75,7 +75,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="CourseList" class="nav-link px-0 align-middle">
+                                <a href="courseList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline">Manage Course</span>
                                 </a>
                             </li>
@@ -85,7 +85,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="ExpertList" class="nav-link px-0 align-middle">
+                                <a href="expertList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Expert Account Manage</span>
                                 </a>
                             </li>
@@ -105,7 +105,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="Top5User" class="nav-link px-0 align-middle">
+                                <a href="top5User" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Top 5 Customers</span>
                                 </a>
                             </li>

@@ -97,7 +97,7 @@ public class updateExpert extends HttpServlet {
         session.setAttribute("message", "Update successfully");
 
         // Forward the request to the editExpertServlet with updated information
-        request.getRequestDispatcher("editExpertServlet").forward(request, response);
+        request.getRequestDispatcher("editExpert").forward(request, response);
     }
 
     /**

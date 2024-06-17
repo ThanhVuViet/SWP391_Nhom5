@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@WebServlet(name = "OrderFilter", urlPatterns = {"/OrderFilter"})
+@WebServlet(name = "OrderFilter", urlPatterns = {"admin/orderFilter"})
 public class OrderFilter extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

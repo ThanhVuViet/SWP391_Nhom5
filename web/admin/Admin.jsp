@@ -72,17 +72,17 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="CourseList" class="nav-link px-0 align-middle">
+                                <a href="courseList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline">Manage Course</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="CustomerList" class="nav-link px-0 align-middle">
+                                <a href="customerList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customer Manage</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="ExpertList" class="nav-link px-0 align-middle">
+                                <a href="expertList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Expert Account Manage</span>
                                 </a>
                             </li>
@@ -102,7 +102,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="Top5User" class="nav-link px-0 align-middle">
+                                <a href="top5User" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Top 5 Customers</span>
                                 </a>
                             </li>
@@ -196,7 +196,7 @@
                                 </table>
                             </div>
                         </div>
-                        <a href="CourseList" class="btn btn-secondary">See More</a>
+                        <a href="courseList" class="btn btn-secondary">See More</a>
                     </div>
                     <div id="customerManage" class="mt-5">
                         <h2>Customer Manage</h2>
@@ -238,7 +238,7 @@
                                 </table>
                             </div>
                         </div>
-                        <a href="CustomerList" class="btn btn-secondary">See More</a>
+                        <a href="customerList" class="btn btn-secondary">See More</a>
                     </div>
                     <div id="expertAccountManage" class="mt-5">
                         <h2>Expert Account Manage</h2>
@@ -290,7 +290,7 @@
                                                 %>
                                             </td>
                                             <td>
-                                                <form action="editExpertServlet" method="post" style="display:inline;">
+                                                <form action="editExpert" method="post" style="display:inline;">
                                                     <input type="hidden" name="expertId" value="<%= expert.getExpertId() %>">
                                                     <button type="submit" class="btn btn-primary btn-sm">Edit</button>
                                                 </form>
@@ -308,7 +308,7 @@
                                 </table>
                             </div>
                         </div>
-                        <a href="ExpertList" class="btn btn-secondary">See More</a>
+                        <a href="expertList" class="btn btn-secondary">See More</a>
                     </div>
                     <div id="viewReports" class="mt-5">
                         <h2>View Reports</h2>

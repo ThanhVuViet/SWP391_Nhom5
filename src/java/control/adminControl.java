@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * @author Admin
  */
-@WebServlet(name="adminControl", urlPatterns={"/adminControl"})
+@WebServlet(name="adminControl", urlPatterns={"/admin"})
 public class adminControl extends HttpServlet {
    
     /** 

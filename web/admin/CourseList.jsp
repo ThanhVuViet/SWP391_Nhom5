@@ -1,24 +1,50 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.List" %>
-<%@ page import="Entity.Expert" %>
-<%@ page import="Entity.Users" %>
-<%@ page import="Entity.Course" %>
-<%@ page import="Entity.Category" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
+    <%@ page import="java.util.ArrayList" %>
+    <%@ page import="java.util.List" %>
+    <%@ page import="java.util.Map" %>
+    <%@ page import="Entity.Expert" %>
+    <%@ page import="Entity.Users" %>
+    <%@ page import="Entity.Course" %>
+
     <head>
         <meta charset="UTF-8">
-        <title>Edit Expert</title>
+        <title>Course Manage</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <style>
             body {
                 margin: 20px;
             }
         </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            function searchByName(input) {
+                var filterName = $('#filterName').val();
+                var filterSpecialty = $('#filterSpecialty').val();
+                $.ajax({
+                    url: 'searchCourseByAjax',
+                    type: 'GET',
+                    data: {
+                        filterName: filterName,
+                        filterSpecialty: filterSpecialty
+                    },
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#expertResults').html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error: ' + error);
+                    }
+                });
+            }
+
+            function searchByCate(input) {
+                searchByName(input); // Using the same function for simplicity
+            }
+        </script>
     </head>
+
     <body>
         <!-- Sidebar Start -->
         <div class="container-fluid content">
@@ -35,7 +61,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="CourseList" class="nav-link px-0 align-middle">
+                                <a href="courseList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-book"></i> <span class="ms-1 d-none d-sm-inline">Manage Course</span>
                                 </a>
                             </li>
@@ -45,7 +71,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="ExpertList" class="nav-link px-0 align-middle">
+                                <a href="expertList" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-person-badge"></i> <span class="ms-1 d-none d-sm-inline">Expert Account Manage</span>
                                 </a>
                             </li>
@@ -65,7 +91,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="Top5User" class="nav-link px-0 align-middle">
+                                <a href="top5User" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Top 5 Customers</span>
                                 </a>
                             </li>
@@ -90,102 +116,96 @@
                 </div>
                 <div class="col py-3">
                     <!-- Main Content Start -->
-                    <div class="container">
-                        <h2>Edit Expert Information</h2>
-                        <% 
-                            String message = (String) request.getAttribute("message");
-                            if (message != null) { 
-                        %>
-                        <div class="alert alert-success" role="alert">
-                            <%= message %>
+                    <div id="expertAccountManage" class="mt-5">
+                        <h2>Course Manage</h2>
+                        <p>Course manage here</p>
+                        <div class="card mb-3">
+                            <div class="card-header">Filter Courses</div>
+                            <div class="card-body">
+                                <form id="filterForm" method="GET" action="experts.jsp">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="filterName">Name</label>
+                                            <input oninput="searchByName(this)" type="text" class="form-control" id="filterName" name="filterName" placeholder="Enter name">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="filterSpecialty">Specialty</label>
+                                            <input oninput="searchByCate(this)" type="text" class="form-control" id="filterSpecialty" name="filterSpecialty" placeholder="Enter specialty">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <% } %>
-                        <%
-                            Map<Integer, List<Course>> courseExpert = (Map<Integer, List<Course>>) request.getAttribute("courseExpert");
-                            Map<Integer, List<String>> expertCategories = (Map<Integer, List<String>>) request.getAttribute("expertCategories");
-                            Expert expert = (Expert) request.getAttribute("expertById");
-                            Users user = expert.getUser();
-                            List<String> categories = expertCategories.get(expert.getExpertId());
-                            List<Course> courses = courseExpert.get(expert.getExpertId());
+                        <div class="card mb-3">
+                            <div class="card-header">Expert Accounts</div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
 
-                            StringBuilder categoriesStrBuilder = new StringBuilder();
-                            for (int i = 0; i < categories.size(); i++) {
-                                categoriesStrBuilder.append(categories.get(i));
-                                if (i < categories.size() - 1) {
-                                    categoriesStrBuilder.append(", ");
-                                }
-                            }
-                            String categoriesStr = categoriesStrBuilder.toString();
-                            List<Category> cateList = (List<Category>) request.getAttribute("cateList");
-                        %>
-                        <form action="updateExpert" method="post">
-                            <div class="form-group">
-                                <label for="username">Name</label>
-                                <input type="text" class="form-control" id="username" name="username" value="<%= user.getUsername() %>">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" value="<%= user.getEmail() %>">
-                            </div>
-                            <div class="form-group">
-                                <label for="specialty">Specialty</label>
-                                <input type="text" class="form-control" id="specialty" name="specialty" value="<%= categoriesStr %>" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="addSpecialty">Add Specialty</label>
-                                <select class="form-control" id="addSpecialty" name="addSpecialty">
-                                    <option value="" disabled selected>Select a category</option>
-                                    <% if (cateList != null) { 
-                                        for (Category category : cateList) {
-                                            if (!categories.contains(category.getCateName())) { %>
-                                    <option value="<%= category.getCateName() %>"><%= category.getCateName() %></option>
-                                    <%      } 
-                                        } 
-                                    } %>
-                                </select>
+                                            <th>Name</th>
+                                            <th>Expert</th>
+                                            <th>Specialty</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="expertResults">
+                                        <%
+                                            
+                                              Map<Integer, List<String>> courseCate = (Map<Integer, List<String>>) request.getAttribute("courseCate");
+    Map<Integer, List<String>> expertCourse = (Map<Integer, List<String>>) request.getAttribute("courseExpert");
+   
+    ArrayList<Course> courseList = (ArrayList<Course>) request.getAttribute("courseList");
 
+    for (Course course : courseList) {
+       
+
+        List<String> experts = expertCourse.get(course.getCourseId());
+        if (experts == null) {
+            experts = new ArrayList<>();
+        }
+        StringBuilder expertsStrBuilder = new StringBuilder();
+        for (int i = 0; i < experts.size(); i++) {
+            expertsStrBuilder.append(experts.get(i));
+            if (i < experts.size() - 1) {
+                expertsStrBuilder.append(", ");
+            }
+        }
+        String expertsStr = expertsStrBuilder.toString();
+
+        List<String> categories = courseCate.get(course.getCourseId());
+        StringBuilder categoriesStrBuilder = new StringBuilder();
+        if (categories != null) {
+            for (int i = 0; i < categories.size(); i++) {
+                categoriesStrBuilder.append(categories.get(i));
+                if (i < categories.size() - 1) {
+                    categoriesStrBuilder.append(", ");
+                }
+            }
+        }
+        String categoriesStr = categoriesStrBuilder.toString();
+                                                
+                                        %>
+                                        <tr>
+                                            <td><%= course.getCourseId() %></td>
+                                            <td><%= course.getTitle() %></td>
+                                            <td><%= expertsStr %></td>
+                                            <td><%= categoriesStr %></td>
+                                            <td>
+                                                <a href="editCourse?courseId=<%= course.getCourseId() %>" class="btn btn-primary btn-sm">Edit</a>
+                                                <button class="btn btn-danger btn-sm">Delete</button>
+                                            </td>
+
+                                        </tr>
+                                        <%
+                                                
+                                            }
+                                        %>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="form-group">
-                                <label for="deleteSpecialty">Delete Specialty</label>
-                                <select class="form-control" id="deleteSpecialty" name="deleteSpecialty">
-                                    <option value="" disabled selected>Select a category</option>
-                                    <% if (categories != null) { 
-                for (String category : categories) { %>
-                                    <option value="<%= category %>"><%= category %></option>
-                                    <% } 
-            } %>
-                                </select>
-                            </div>
-                            <input type="hidden" name="expertId" value="<%= expert.getExpertId() %>">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </form>
-                        <h3 class="mt-4">Courses Taught</h3>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Course ID</th>
-                                    <th>Course Name</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% if (courses != null) { 
-                                    for (Course course : courses) { %>
-                                <tr>
-                                    <td><%= course.getCourseId() %></td>
-                                    <td><%= course.getTitle() %></td>
-                                    <td><%= course.getDescription() %></td>
-                                    <td><a href="viewCourseDetails?courseId=<%= course.getCourseId() %>" class="btn btn-info btn-sm">View Course</a></td>
-                                </tr>
-                                <% } 
-                                } else { %>
-                                <tr>
-                                    <td colspan="4">No courses found for this expert.</td>
-                                </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
+                        </div>
                     </div>
                     <!-- Main Content End -->
                 </div>
@@ -266,7 +286,7 @@
                                 <a href="">Cookies</a>
                                 <a href="">Help</a>
                                 <a href="">FQAs</a>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                 </div>
