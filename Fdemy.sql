@@ -163,9 +163,10 @@ VALUES
 INSERT INTO Users (role_id, username, password, full_name, email, birth_date, image, phone_number, address, created_at, banned)
 VALUES 
 (2, 'minh123456', '123', 'John Doe', 'john.doe@example.com', '1990-05-15', NULL, '0987654321', '456 John Street', GETDATE(), 0)
+
 INSERT INTO Users (role_id, username, password, full_name, email, birth_date, image, phone_number, address, created_at, banned)
 VALUES 
-(2, 'minh1234567', '123', 'John Doe', 'john.doe@example.com', '1990-05-15', NULL, '0987654321', '456 John Street', GETDATE(), 0)
+(2, 'huongthoi', '123', 'John Doe', 'john.doe@example.com', '1990-05-15', NULL, '0987654321', '456 John Street', GETDATE(), 0)
 INSERT INTO Users (role_id, username, password, full_name, email, birth_date, image, phone_number, address, created_at, banned)
 VALUES 
 (2, 'minh12345678', '123', 'John Doe', 'john.doe@example.com', '1990-05-15', NULL, '0987654321', '456 John Street', GETDATE(), 0)
@@ -298,3 +299,272 @@ VALUES
 (2, '2023-07-01 09:40:00', 99.99),
 (3, '2023-07-05 17:50:10', 149.99),
 (1, '2023-07-10 20:15:25', 59.99);
+select * from Orders
+select * from Users
+SELECT * FROM Users WHERE user_id IN (1, 2, 3);
+INSERT INTO Orders (user_id, order_date, total_amount)
+VALUES 
+(9, '2023-06-01 12:34:56', 99.99),
+(10, '2023-06-05 08:15:30', 199.99),
+(11, '2023-06-10 10:20:00', 149.99),
+(9, '2023-06-15 14:45:00', 79.99),
+(10, '2023-06-20 16:30:45', 129.99),
+(11, '2023-06-25 18:10:20', 109.99),
+(9, '2023-06-30 11:22:33', 89.99),
+(10, '2023-07-01 09:40:00', 99.99),
+(11, '2023-07-05 17:50:10', 149.99),
+(9, '2023-07-10 20:15:25', 59.99);
+
+INSERT INTO OrderItems (order_id, course_id)
+VALUES 
+(3, 1),
+(5, 2),
+(4, 3),
+(7, 4),
+(3, 5),
+(4, 1),
+(4, 3),
+(5, 2),
+(6, 4),
+(6, 5),
+(7, 1),
+(7, 2),
+(8, 3),
+(8, 4),
+(9, 5),
+(10, 1),
+(10, 2);
+-- update 1/6
+CREATE TABLE ExpertCategories (
+    expert_id INT NOT NULL,
+    category_id INT NOT NULL,
+    CONSTRAINT FK_ExpertCategories_Experts FOREIGN KEY (expert_id) REFERENCES Experts (expert_id),
+    CONSTRAINT FK_ExpertCategories_Categories FOREIGN KEY (category_id) REFERENCES Categories (category_id),
+    CONSTRAINT PK_ExpertCategories PRIMARY KEY (expert_id, category_id)
+);
+
+INSERT INTO ExpertCategories (expert_id, category_id)
+VALUES 
+(1, 1), 
+(1, 2), 
+(2, 2), 
+(2, 3),
+(3, 4),
+(3, 5);
+INSERT INTO ExpertCategories (expert_id, category_id)
+Values(4,1)
+
+select * from Experts
+select * from Categories
+select * from Users
+select * from Experts
+select * from ExpertCourses
+select * from Courses
+select * from ExpertCategories
+select * from Experts c
+
+select  u.username, c.expert_id, u.email, ca.name from Experts c
+join ExpertCategories e on c.expert_id = e.expert_id
+join Categories ca on e.category_id = ca.category_id
+join Users u on u.user_id = c.user_id
+where u.username like '%h%' 
+
+
+
+select  * from Experts c
+join ExpertCategories e on c.expert_id = e.expert_id
+join Categories ca on e.category_id = ca.category_id
+join Users u on u.user_id = c.user_id
+where u.username like '%h%' 
+
+select * from Experts e
+join Users u on e.certification = u.user_id
+select * from Experts e where e.expert_id =2
+SELECT *
+FROM (
+    SELECT 
+       c.expert_id, 
+       u.user_id, 
+       c.description, 
+       c.certification, 
+       u.role_id,
+       u.username,
+       u.password,
+       u.full_name,
+       u.email,
+       u.birth_date,
+       u.image,
+       u.phone_number,
+       u.address,
+       u.created_at,
+       u.banned,
+       u.failedAttempt,
+	   u.lockTime,
+       ROW_NUMBER() OVER (PARTITION BY u.username ORDER BY c.expert_id) AS row_num
+    FROM Experts c
+    JOIN ExpertCategories e ON c.expert_id = e.expert_id
+    JOIN Categories ca ON e.category_id = ca.category_id
+    JOIN Users u ON u.user_id = c.user_id
+    WHERE u.username LIKE '%h%'
+) AS subquery
+WHERE row_num = 1;
+
+select * from Experts e
+join Users u on e.user_id = u.user_id
+where u.username like't%'
+select * from Users
+
+join Users u on u.user_id = c.user_id
+where u.username like '%h%' 
+
+
+select * from ExpertCourses ec
+join Experts e on ec.expert_id = e.expert_id
+join Courses c on ec.course_id = c.course_id
+
+update Experts set description = 'haha' where expert_id = 2
+
+select u.username, u.email, c.name
+from Experts e
+join Users u on e.user_id = u.user_id
+join ExpertCategories ec on e.expert_id = ec.expert_id
+join Categories c on ec.category_id = c.category_id
+
+update Users set username = 'minhdeptrai', email = 'vosong10x@gmail.com'
+where user_id = (select e.user_id
+				 from Experts e
+				 where expert_id = 2)
+update Categories set name 
+
+select * from Users
+select * from Experts
+
+select * from Admin
+select * from Courses
+select * from Courses co
+join Categories c
+on co.category_id = c.category_id
+where c.name like '%P%' and co.title like '%J%'
+sec
+select * From Courses c
+where c.course_id = 1
+
+UPDATE Courses SET description = 'hehe' WHERE course_id = 1;
+
+update Courses set category_id = 2 where course_id = 1
+update Courses set description = 'huhu', Title ='Java Test' where course_id =1;
+select * from ExpertCategories
+select * from Experts
+Insert into ExpertCategories Values (1,3)
+select * from Categories
+select * from Categories where Categories.name = 'Programming'
+
+select * from Users
+
+select * from Users
+
+SELECT u.username
+FROM Users u
+JOIN Experts e ON u.user_id = e.user_id  
+JOIN ExpertCategories ec on e.expert_id = ec.expert_id 
+JOIN Categories c ON ec.category_id = c.category_id
+WHERE c.name like '%P%'
+
+SELECT u.username
+FROM Users u
+JOIN Experts e ON u.user_id = e.user_id 
+
+select * from Users
+select * from Roles
+
+INSERT INTO Orders (user_id, order_date, total_amount)
+VALUES 
+(12, '2023-06-01', 300.00),
+(13, '2023-06-02', 200.00),
+(14, '2023-06-03', 150.00),
+(15, '2023-06-04', 400.00),
+(16, '2023-06-05', 250.00),
+(17, '2023-06-06', 350.00),
+(18, '2023-06-07', 450.00),
+(19, '2023-06-08', 500.00),
+(20, '2023-06-09', 600.00),
+(21, '2023-06-10', 700.00);
+
+INSERT INTO OrderItems (order_id, course_id)
+VALUES 
+(3, 1),
+(4, 2),
+(5, 3),
+(6, 4),
+(7, 5),
+(8, 6),
+(9, 7),
+(10, 8),
+(11, 9),
+(12, 10),
+(13, 2),
+(14, 3),
+(15, 4);
+
+select * from Orders
+
+select * from Courses
+SELECT * 
+FROM Orders 
+WHERE order_date BETWEEN '2023-06-16' AND '2023-06-30';
+
+UPDATE Orders
+SET order_date = DATEADD(year, 1, order_date)
+WHERE YEAR(order_date) = 2023;
+
+SELECT Month(o.order_date),sum(o.total_amount) as monthly
+FROM Orders o
+group by MONTH(o.order_date)
+select * from Users
+INSERT INTO Orders (user_id, order_date, total_amount)
+VALUES 
+(12, '2024-01-05', 300.00),
+(13, '2024-01-15', 150.00),
+(14, '2024-01-25', 450.00),
+(15, '2024-02-10', 500.00),
+(16, '2024-02-20', 300.00),
+(17, '2024-02-28', 200.00),
+(18, '2024-03-05', 350.00),
+(19, '2024-03-15', 400.00),
+(20, '2024-03-25', 250.00),
+(21, '2024-04-05', 300.00),
+(22, '2024-04-15', 150.00),
+(23, '2024-04-25', 450.00),
+(12, '2024-05-10', 500.00),
+(13, '2024-05-20', 300.00),
+(14, '2024-05-28', 200.00),
+(15, '2024-06-01', 300.00),
+(16, '2024-06-02', 200.00),
+(17, '2024-06-03', 150.00),
+(18, '2024-06-04', 400.00),
+(19, '2024-06-05', 250.00),
+(20, '2024-06-06', 350.00),
+(21, '2024-06-07', 450.00),
+(22, '2024-06-08', 500.00),
+(23, '2024-06-09', 600.00),
+(12, '2024-06-10', 700.00),
+(13, '2024-07-05', 300.00),
+(14, '2024-07-15', 150.00),
+(15, '2024-07-25', 450.00),
+(16, '2024-08-10', 500.00),
+(17, '2024-08-20', 300.00),
+(18, '2024-08-28', 200.00),
+(19, '2024-09-05', 350.00),
+(20, '2024-09-15', 400.00),
+(21, '2024-09-25', 250.00),
+(22, '2024-10-05', 300.00),
+(23, '2024-10-15', 150.00),
+(12, '2024-10-25', 450.00),
+(13, '2024-11-10', 500.00),
+(14, '2024-11-20', 300.00),
+(15, '2024-11-28', 200.00),
+(16, '2024-12-05', 350.00),
+(17, '2024-12-15', 400.00),
+(18, '2024-12-25', 250.00);
+
+
