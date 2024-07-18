@@ -1,0 +1,163 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="Entity.ExamQuestion" %>
+<%@ page import="Entity.ExamChoice" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            display: flex;
+        }
+        .content {
+            flex: 1;
+            margin-right: 220px; /* Adjusted for the sidebar */
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            right: 20px;
+            top: 20px;
+        }
+        .question {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .alternatives {
+            margin-top: 10px;
+        }
+        .submit-btn {
+            margin-top: 10px;
+        }
+        #timer {
+            font-size: 20px;
+            color: red;
+            margin-bottom: 20px;
+        }
+        .sidebar button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+        }
+        .sidebar button.active {
+            background-color: #d0d0d0;
+        }
+        .sidebar button.selected {
+            background-color: #000;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <h2>Quiz</h2>
+    <div id="timer">10:00</div>
+
+    <form id="quizForm" action="quiz" method="post">
+        <%
+            List<ExamQuestion> questions = (List<ExamQuestion>) request.getAttribute("questions");
+            if (questions != null) {
+                for (int i = 0; i < questions.size(); i++) {
+                    ExamQuestion question = questions.get(i);
+        %>
+        <div class="question" id="question_<%= i %>">
+            <h3><%= question.getQuestionText() %></h3>
+            <div class="alternatives">
+                <%
+                    List<ExamChoice> choices = question.getChoices();
+                    for (int j = 0; j < choices.size(); j++) {
+                        ExamChoice choice = choices.get(j);
+                        String isChecked = (request.getParameter("answer_" + i) != null && Integer.parseInt(request.getParameter("answer_" + i)) == choice.getChoiceId()) ? "checked" : "";
+                %>
+                <input type="radio" name="answer_<%= i %>" value="<%= choice.getChoiceId() %>" <%= isChecked %> onchange="highlightAnsweredQuestion(<%= i %>)"> <%= choice.getChoiceText() %><br>
+                <%
+                    }
+                %>
+            </div>
+            <input type="hidden" name="questionIndex" value="<%= i %>">
+        </div>
+        <%
+                }
+            } else {
+        %>
+        <p>No questions available for this exam.</p>
+        <%
+            }
+        %>
+        <input type="submit" value="Submit All" class="submit-btn">
+    </form>
+</div>
+
+<div class="sidebar">
+    <h3>Questions</h3>
+    <%
+        if (questions != null) {
+            for (int i = 0; i < questions.size(); i++) {
+                boolean isSelected = request.getParameter("answer_" + i) != null;
+    %>
+    <button type="button" class="<%= isSelected ? "selected" : "" %>" onclick="scrollToQuestion(<%= i %>)">Question <%= (i + 1) %></button>
+    <%
+            }
+        }
+    %>
+</div>
+
+<script>
+    let timeLeft = 600; // Total time for the quiz in seconds (10 minutes)
+    const timerElement = document.getElementById('timer');
+    let timer;
+
+    function startTimer() {
+        timer = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                document.getElementById('quizForm').submit();
+            } else {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                timeLeft--;
+            }
+        }, 1000);
+    }
+
+    function scrollToQuestion(index) {
+        document.getElementById(`question_${index}`).scrollIntoView({ behavior: 'smooth' });
+        highlightButton(index);
+    }
+
+    function highlightButton(index) {
+        const buttons = document.querySelectorAll('.sidebar button');
+        buttons.forEach((button, idx) => {
+            button.classList.toggle('active', idx === index);
+        });
+    }
+
+    function highlightAnsweredQuestion(index) {
+        const button = document.querySelector(`.sidebar button:nth-child(${index + 2})`);
+        button.classList.add('selected');
+    }
+
+    window.onload = function() {
+        startTimer();
+    };
+</script>
+
+</body>
+</html>

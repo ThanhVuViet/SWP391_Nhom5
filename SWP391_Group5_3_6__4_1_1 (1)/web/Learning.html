@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #004d99;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .video-section {
+            flex: 2;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .video-container {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            margin-bottom: 20px;
+        }
+
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        .course-content {
+            flex: 1;
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-left: 2px solid #ddd;
+        }
+
+        .course-content h3 {
+            margin-top: 0;
+        }
+
+        .course-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .course-content ul ul {
+            padding-left: 20px;
+        }
+
+        .course-content li {
+            margin-bottom: 10px;
+        }
+
+        .learning-tools {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .learning-tools h3 {
+            margin-top: 0;
+        }
+
+        .learning-tools button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #004d99;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .learning-tools button:hover {
+            background-color: #003366;
+        }
+
+        footer {
+            background-color: #004d99;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Java 17 Masterclass: Start Coding in 2024</h1>
+    </header>
+    <main>
+        <div class="container">
+            <section class="video-section">
+                <h2>Primitive Types</h2>
+                <div class="video-container">
+                    <video controls>
+                        <source src="video.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </section>
+            <aside class="course-content">
+                <h3>Course content</h3>
+                <ul>
+                    <li>Section 1: Getting Started</li>
+                    <li>Section 2: Programming Tools Setup</li>
+                    <li>Section 3: First Steps
+                        <ul>
+                            <li>14. Hello World (10 min)</li>
+                            <li>15. Variables (16 min)</li>
+                            <li>16. Starting out with Expressions (9 min)</li>
+                            <li>17. Primitive Types (17 min)</li>
+                            <li>18. byte, short, long and width (13 min)</li>
+                            <li>19. Casting in Java (9 min)</li>
+                            <li>20. Primitive Types Challenge (9 min)</li>
+                            <li>21. Float and Double Primitives (11 min)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <section class="learning-tools">
+            <h3>Schedule learning time</h3>
+            <p>Learning a little each day adds up. Research shows that students who make learning a habit are more likely to reach their goals. Set time aside to learn and get reminders using your learning scheduler.</p>
+            <button>Get started</button>
+            <button>Dismiss</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Learning Platform</p>
+    </footer>
+</body>
+</html>
